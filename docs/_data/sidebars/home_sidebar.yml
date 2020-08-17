@@ -7,24 +7,30 @@ entries:
 - folders:
   - folderitems:
     - output: web,pdf
-      title: Export to modules
-      url: /export.html
+      title: Overview
+      url: /
     - output: web,pdf
-      title: Convert to html
-      url: /export2html.html
+      title: HyperparamsLoggerCallback
+      url: /cb_hyperparamlogger
     - output: web,pdf
-      title: Show doc
-      url: /showdoc.html
+      title: LogTableMetricsCallback
+      url: /cb_logtable
     - output: web,pdf
-      title: Test functions
-      url: /test.html
+      title: Config
+      url: /config
     - output: web,pdf
-      title: Core functions
-      url: /core.html
+      title: Dataset
+      url: /dataset
     - output: web,pdf
-      title: Command line functions
-      url: /cli.html
+      title: Layers
+      url: /layers
+    - output: web,pdf
+      title: Models
+      url: /model
+    - output: web,pdf
+      title: Utils
+      url: /utils
     output: web
-    title: Notebook
+    title: isic
   output: web
   title: Sidebar
