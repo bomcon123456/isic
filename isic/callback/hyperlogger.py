@@ -58,7 +58,6 @@ class HyperparamsLogger(Callback):
                             'name': 'my_logging_name'}
             return [optimizer], [lr_scheduler]
     """
-    _supports = ['lr', 'learning_rate', 'momentum', 'beta1']
     def __init__(self, logging_interval: Optional[str] = None):
         if logging_interval not in (None, 'step', 'epoch'):
             raise MisconfigurationException(

@@ -60,21 +60,6 @@ nb_path: "nbs\model.ipynb"
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -110,7 +95,7 @@ nb_path: "nbs\model.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/models.py#L23" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>() :: <code>LightningModule</code></p>
+<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/models.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>() :: <code>LightningModule</code></p>
 </blockquote>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -173,8 +158,7 @@ inheritance.</p>
 <span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
 
 <span class="c1"># most basic trainer, uses good defaults</span>
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="c1"># trainer.fit(model, dm)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">MixupDict</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -192,6 +176,92 @@ GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
 </pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>
+  | Name   | Type   | Params
+----------------------------------
+0 | resnet | ResNet | 23 M  
+C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:23: UserWarning: 
+                    When using EvalResult(early_stop_on=X) or TrainResult(early_stop_on=X) the
+                    &#39;monitor&#39; key of ModelCheckpoint has no effect.
+                    Remove ModelCheckpoint(monitor=&#39;loss) to fix&#39;)
+                
+  warnings.warn(*args, **kwargs)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>train_acc</th>
+      <th>val_loss</th>
+      <th>val_acc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>1.987</td>
+      <td>0.109375</td>
+      <td>2.134377</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table><p>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1</pre>
+</div>
+
 </div>
 
 </div>
@@ -305,7 +375,7 @@ TPU available: False, using: 0 TPU cores
 
 
 <div class="output_text output_subarea ">
-<pre>Reusing TensorBoard on port 6006 (pid 5012), started 0:13:00 ago. (Use &#39;!kill 5012&#39; to kill it.)</pre>
+<pre>Reusing TensorBoard on port 6006 (pid 4636), started 0:02:09 ago. (Use &#39;!kill 4636&#39; to kill it.)</pre>
 </div>
 
 </div>
@@ -315,24 +385,83 @@ TPU available: False, using: 0 TPU cores
 
 <div class="output_html rendered_html output_subarea ">
 
-      <iframe id="tensorboard-frame-2d8d526c3944768c" width="100%" height="800" frameborder="0">
+      <iframe id="tensorboard-frame-72dfb0c7e9cb7052" width="100%" height="800" frameborder="0">
       </iframe>
       <script>
         (function() {
-          const frame = document.getElementById("tensorboard-frame-2d8d526c3944768c");
+          const frame = document.getElementById("tensorboard-frame-72dfb0c7e9cb7052");
           const url = new URL("/", window.location);
-          const port = 6006;
-          if (port) {
-            url.port = port;
-          }
+          url.port = 6006;
           frame.src = url;
         })();
       </script>
+  
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
     
-</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class ResnetModel(LightningModule):</span>
+<span class="c1">#     def __init__(self):</span>
+<span class="c1">#         super().__init__()</span>
+<span class="c1"># #         self.save_hyperparameters()</span>
+<span class="c1">#         self.resnet = models.resnet50(pretrained=True)</span>
+<span class="c1">#         num_ftrs = self.resnet.fc.in_features</span>
+<span class="c1">#         self.resnet.fc = nn.Linear(num_ftrs, 7)</span>
+<span class="c1">#         self.loss_func = F.cross_entropy</span>
 
+<span class="c1">#     def forward(self, x):</span>
+<span class="c1">#         return self.resnet(x)</span>
+
+<span class="c1">#     def training_step(self, batch, batch_idx):</span>
+<span class="c1">#         print(batch)</span>
+<span class="c1">#         if hasattr(self, &#39;enhanced_batch&#39;):</span>
+<span class="c1">#             print(&#39;hehe&#39;)</span>
+<span class="c1">#             batch = self.enhanced_batch</span>
+<span class="c1">#         x, y = batch</span>
+<span class="c1">#         y_hat = self(x)</span>
+<span class="c1">#         loss = self.loss_func(y_hat, y)</span>
+<span class="c1">#         acc = FM.accuracy(y_hat, y, num_classes=7)</span>
+<span class="c1">#         result = pl.TrainResult(minimize=loss)</span>
+<span class="c1">#         result.log(&#39;train_loss&#39;, loss)</span>
+<span class="c1">#         result.log(&#39;train_acc&#39;, acc, prog_bar=True)</span>
+<span class="c1">#         return result</span>
+
+<span class="c1">#     def validation_step(self, batch, batch_idx):</span>
+<span class="c1">#         x, y = batch</span>
+<span class="c1">#         y_hat = self(x)</span>
+<span class="c1">#         loss = F.cross_entropy(y_hat, y)</span>
+<span class="c1">#         acc = FM.accuracy(y_hat, y, num_classes=7)</span>
+<span class="c1">#         result = pl.EvalResult(checkpoint_on=loss)</span>
+<span class="c1">#         result.log(&#39;val_loss&#39;, loss, prog_bar=True) </span>
+<span class="c1">#         result.log(&#39;val_acc&#39;, acc, prog_bar=True)</span>
+<span class="c1">#         return result</span>
+
+<span class="c1">#     def configure_optimizers(self):</span>
+<span class="c1">#         opt = torch.optim.Adam(self.parameters(), lr=1e-2)</span>
+<span class="c1">#         scheduler = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=1e-2, steps_per_epoch=140, epochs=10)</span>
+<span class="c1">#         sched = {</span>
+<span class="c1">#             &#39;scheduler&#39;: scheduler, # The LR schduler</span>
+<span class="c1">#             &#39;interval&#39;: &#39;step&#39;, # The unit of the scheduler&#39;s step size</span>
+<span class="c1">#             &#39;frequency&#39;: 1, # The frequency of the scheduler</span>
+<span class="c1">#             &#39;reduce_on_plateau&#39;: False, # For ReduceLROnPlateau scheduler</span>
+<span class="c1">#         }</span>
+<span class="c1">#         return [opt], [sched]</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 

@@ -16,11 +16,11 @@ entries:
       title: LogTableMetricsCallback
       url: /cb_logtable
     - output: web,pdf
+      title: Mixup Callback
+      url: /cb_mixup
+    - output: web,pdf
       title: Config
       url: /config
-    - output: web,pdf
-      title: Dataset
-      url: /dataset
     - output: web,pdf
       title: Layers
       url: /layers

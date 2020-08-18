@@ -18,6 +18,7 @@ from pytorch_lightning.metrics import functional as FM
 from .dataset import SkinDataModule
 from .callback.hyperlogger import HyperparamsLogger
 from .callback.logtable import LogTableMetricsCallback
+from .callback.mixup import MixupDict
 
 # Cell
 class ResnetModel(LightningModule):
@@ -27,14 +28,15 @@ class ResnetModel(LightningModule):
         self.resnet = models.resnet50(pretrained=True)
         num_ftrs = self.resnet.fc.in_features
         self.resnet.fc = nn.Linear(num_ftrs, 7)
+        self.loss_func = F.cross_entropy
 
     def forward(self, x):
         return self.resnet(x)
 
     def training_step(self, batch, batch_idx):
-        x, y = batch
+        x, y = batch['img'], batch['label']
         y_hat = self(x)
-        loss = F.cross_entropy(y_hat, y)
+        loss = self.loss_func(y_hat, y)
         acc = FM.accuracy(y_hat, y, num_classes=7)
         result = pl.TrainResult(minimize=loss)
         result.log('train_loss', loss)
@@ -42,7 +44,7 @@ class ResnetModel(LightningModule):
         return result
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch
+        x, y = batch['img'], batch['label']
         y_hat = self(x)
         loss = F.cross_entropy(y_hat, y)
         acc = FM.accuracy(y_hat, y, num_classes=7)

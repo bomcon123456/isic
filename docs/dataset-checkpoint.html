@@ -80,61 +80,21 @@ nb_path: "nbs\.ipynb_checkpoints\dataset-checkpoint.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">PathConfig</span><span class="o">.</span><span class="n">CSV_PATH</span>
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="SkinLabels" class="doc_header"><code>class</code> <code>SkinLabels</code><a href="https://github.com/termanteus/isic/tree/master/isic/dataset.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SkinLabels</code>()</p>
+</blockquote>
+
 </div>
-</div>
 
 </div>
-    {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">compute_img_mean_std</span><span class="p">(</span><span class="n">image_paths</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        computing the mean and std of three channel on the whole dataset,</span>
-<span class="sd">        first we should normalize the image from 0-255 to 0-1</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">img_h</span><span class="p">,</span> <span class="n">img_w</span> <span class="o">=</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span>
-    <span class="n">imgs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">means</span><span class="p">,</span> <span class="n">stdevs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_paths</span><span class="p">))):</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_paths</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="n">img_h</span><span class="p">,</span> <span class="n">img_w</span><span class="p">))</span>
-        <span class="n">imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-
-    <span class="n">imgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">imgs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-    <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-        <span class="n">pixels</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>  <span class="c1"># resize to one row</span>
-        <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pixels</span><span class="p">))</span>
-        <span class="n">stdevs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">pixels</span><span class="p">))</span>
-
-    <span class="n">means</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>  <span class="c1"># BGR --&gt; RGB</span>
-    <span class="n">stdevs</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;normMean = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">means</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;normStd = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stdevs</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">means</span><span class="p">,</span><span class="n">stdevs</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
@@ -166,75 +126,6 @@ nb_path: "nbs\.ipynb_checkpoints\dataset-checkpoint.ipynb"
 
 </div>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">PathConfig</span><span class="o">.</span><span class="n">CSV_PATH</span><span class="p">)</span>
-<span class="n">train_df</span><span class="p">,</span> <span class="n">valid_df</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">preprocess_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">image_label_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">compute_img_mean_std</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">valid_df</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
@@ -301,7 +192,7 @@ of :class:<code>~torch.utils.data.DataLoader</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SkinDataModule" class="doc_header"><code>class</code> <code>SkinDataModule</code><a href="https://github.com/termanteus/isic/tree/master/isic/dataset.py#L141" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SkinDataModule</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>LightningDataModule</code></p>
+<h2 id="SkinDataModule" class="doc_header"><code>class</code> <code>SkinDataModule</code><a href="https://github.com/termanteus/isic/tree/master/isic/dataset.py#L140" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SkinDataModule</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>LightningDataModule</code></p>
 </blockquote>
 <p>A DataModule standardizes the training, val, test splits, data preparation and transforms.
 The main advantage is consistent data splits, data preparation and transforms across models.</p>
@@ -337,155 +228,6 @@ The main advantage is consistent data splits, data preparation and transforms ac
 </ul>
 <p>This allows you to share a full dataset without explaining how to download,
 split transform and process the data</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">SkinDataModule</span><span class="p">()</span>
-<span class="n">test</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">train_ds</span><span class="o">.</span><span class="n">show_grid</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">calculate_stats_varaccum</span><span class="p">(</span><span class="n">train_dl</span><span class="p">):</span>
-    <span class="n">nimages</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">mean</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">var</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="k">for</span> <span class="n">i_batch</span><span class="p">,</span> <span class="n">batch_target</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_dl</span><span class="p">):</span>
-        <span class="n">batch</span> <span class="o">=</span> <span class="n">batch_target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c1"># Rearrange batch to be the shape of [B, C, W * H]</span>
-        <span class="n">batch</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">batch</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># Update total number of images</span>
-        <span class="n">nimages</span> <span class="o">+=</span> <span class="n">batch</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="c1"># Compute mean and std here</span>
-        <span class="n">mean</span> <span class="o">+=</span> <span class="n">batch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> 
-        <span class="n">var</span> <span class="o">+=</span> <span class="n">batch</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="n">mean</span> <span class="o">/=</span> <span class="n">nimages</span>
-    <span class="n">var</span> <span class="o">/=</span> <span class="n">nimages</span>
-    <span class="n">std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="n">mean</span><span class="p">,</span> <span class="n">std</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="SkinDataBunch" class="doc_header"><code>class</code> <code>SkinDataBunch</code><a href="https://github.com/termanteus/isic/tree/master/isic/dataset.py#L181" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SkinDataBunch</code>(<strong><code>train_dl</code></strong>, <strong><code>valid_dl</code></strong>, <strong><code>labels</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">db</span> <span class="o">=</span> <span class="n">SkinDataBunch</span><span class="p">(</span><span class="n">train_dl</span><span class="p">,</span> <span class="n">valid_dl</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_skin_databunch" class="doc_header"><code>get_skin_databunch</code><a href="https://github.com/termanteus/isic/tree/master/isic/dataset.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_skin_databunch</code>(<strong><code>size</code></strong>=<em><code>100</code></em>, <strong><code>transform</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
 
 </div>
 
