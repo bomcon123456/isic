@@ -29,7 +29,7 @@ class CutmixDict(Callback):
         super().__init__()
         self.distrib = Beta(tensor(alpha), tensor(alpha))
 
-    def on_fit_start(self, trainer, pl_module):
+    def on_train_start(self, trainer, pl_module):
         assert hasattr(pl_module, 'loss_func'), 'Your LightningModule should have loss_func attribute as your loss function.'
         self.old_lf = pl_module.loss_func
         self.loss_fnc = MixLoss(self.old_lf, self)
