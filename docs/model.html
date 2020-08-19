@@ -95,7 +95,52 @@ nb_path: "nbs\model.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/models.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>() :: <code>LightningModule</code></p>
+<h2 id="LabelSmoothingCrossEntropy" class="doc_header"><code>class</code> <code>LabelSmoothingCrossEntropy</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LabelSmoothingCrossEntropy</code>(<strong><code>eps</code></strong>:<code>float</code>=<em><code>0.1</code></em>, <strong><code>reduction</code></strong>=<em><code>'mean'</code></em>) :: <code>Module</code></p>
+</blockquote>
+<p>Base class for all neural network modules.</p>
+<p>Your models should also subclass this class.</p>
+<p>Modules can also contain other Modules, allowing to nest them in
+a tree structure. You can assign the submodules as regular attributes::</p>
+
+<pre><code>import torch.nn as nn
+import torch.nn.functional as F
+
+class Model(nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 5)
+        self.conv2 = nn.Conv2d(20, 20, 5)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        return F.relu(self.conv2(x))
+
+</code></pre>
+<p>Submodules assigned in this way will be registered, and will have their
+parameters converted too when you call :meth:<code>to</code>, etc.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L39" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>) :: <code>LightningModule</code></p>
 </blockquote>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -154,11 +199,11 @@ inheritance.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ResnetModel</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ResnetModel</span><span class="p">(</span><span class="n">steps_epoch</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
 <span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
 
 <span class="c1"># most basic trainer, uses good defaults</span>
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">MixupDict</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">CutmixDict</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -205,15 +250,25 @@ TPU available: False, using: 0 TPU cores
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>
-  | Name   | Type   | Params
-----------------------------------
-0 | resnet | ResNet | 23 M  
-C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:23: UserWarning: 
-                    When using EvalResult(early_stop_on=X) or TrainResult(early_stop_on=X) the
-                    &#39;monitor&#39; key of ModelCheckpoint has no effect.
-                    Remove ModelCheckpoint(monitor=&#39;loss) to fix&#39;)
-                
-  warnings.warn(*args, **kwargs)
+  | Name      | Type    | Params
+--------------------------------------
+0 | resnet    | ResNet  | 23 M  
+1 | loss_func | MixLoss | 0     
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>hehe
+MixLoss(
+  (old_lf): CrossEntropyLoss()
+)
+hehe
+MixLoss(
+  (old_lf): CrossEntropyLoss()
+)
 </pre>
 </div>
 </div>
@@ -235,9 +290,9 @@ C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\util
   <tbody>
     <tr>
       <td>1</td>
-      <td>1.987</td>
-      <td>0.109375</td>
-      <td>2.134377</td>
+      <td>2.101</td>
+      <td>0.046875</td>
+      <td>2.057668</td>
       <td>0.000000</td>
     </tr>
   </tbody>
@@ -277,76 +332,10 @@ C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\util
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ResnetModel</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">ere</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">reload_ext</span> tensorboard
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">hparams</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#34;ere&#34;: 123
-&#34;lr&#34;:  1</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> tensorboard
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>The tensorboard extension is already loaded. To reload it, use:
-  %reload_ext tensorboard
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -375,7 +364,7 @@ C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\util
 
 
 <div class="output_text output_subarea ">
-<pre>Reusing TensorBoard on port 6006 (pid 4636), started 0:02:09 ago. (Use &#39;!kill 4636&#39; to kill it.)</pre>
+<pre>Reusing TensorBoard on port 6006 (pid 4636), started 1 day, 1:44:30 ago. (Use &#39;!kill 4636&#39; to kill it.)</pre>
 </div>
 
 </div>
@@ -385,11 +374,11 @@ C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\util
 
 <div class="output_html rendered_html output_subarea ">
 
-      <iframe id="tensorboard-frame-72dfb0c7e9cb7052" width="100%" height="800" frameborder="0">
+      <iframe id="tensorboard-frame-e66b67374c344c19" width="100%" height="800" frameborder="0">
       </iframe>
       <script>
         (function() {
-          const frame = document.getElementById("tensorboard-frame-72dfb0c7e9cb7052");
+          const frame = document.getElementById("tensorboard-frame-e66b67374c344c19");
           const url = new URL("/", window.location);
           url.port = 6006;
           frame.src = url;
@@ -400,6 +389,23 @@ C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\util
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>tensorboard --logdir<span class="o">=</span>lightning_logs/
+</pre></div>
+
+    </div>
 </div>
 </div>
 
@@ -462,6 +468,38 @@ C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\util
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">notebook2script</span><span class="p">(</span><span class="s1">&#39;model.ipynb&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Converted cb_mixup.ipynb.
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 

@@ -10,6 +10,9 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
+      title: Cutmix Callback
+      url: /cb_cutmix
+    - output: web,pdf
       title: HyperparamsLoggerCallback
       url: /cb_hyperparamlogger
     - output: web,pdf

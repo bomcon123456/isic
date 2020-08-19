@@ -73,7 +73,7 @@ nb_path: "nbs\layers.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="AdaptiveConcatPool2d" class="doc_header"><code>class</code> <code>AdaptiveConcatPool2d</code><a href="https://github.com/termanteus/isic/tree/master/isic/layers.py#L10" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AdaptiveConcatPool2d</code>(<strong><code>sz</code></strong>=<em><code>1</code></em>) :: <code>Module</code></p>
+<h2 id="AdaptiveConcatPool2d" class="doc_header"><code>class</code> <code>AdaptiveConcatPool2d</code><a href="https://github.com/termanteus/isic/tree/master/isic/layers.py#L12" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AdaptiveConcatPool2d</code>(<strong><code>sz</code></strong>=<em><code>1</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Base class for all neural network modules.</p>
 <p>Your models should also subclass this class.</p>
@@ -99,6 +99,90 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 </div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="MixLoss" class="doc_header"><code>class</code> <code>MixLoss</code><a href="https://github.com/termanteus/isic/tree/master/isic/layers.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MixLoss</code>(<strong><code>old_lf</code></strong>, <strong><code>mixup_cb</code></strong>) :: <code>Module</code></p>
+</blockquote>
+<p>Base class for all neural network modules.</p>
+<p>Your models should also subclass this class.</p>
+<p>Modules can also contain other Modules, allowing to nest them in
+a tree structure. You can assign the submodules as regular attributes::</p>
+
+<pre><code>import torch.nn as nn
+import torch.nn.functional as F
+
+class Model(nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 5)
+        self.conv2 = nn.Conv2d(20, 20, 5)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        return F.relu(self.conv2(x))
+
+</code></pre>
+<p>Submodules assigned in this way will be registered, and will have their
+parameters converted too when you call :meth:<code>to</code>, etc.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev.export</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">notebook2script</span><span class="p">(</span><span class="s1">&#39;layers.ipynb&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Converted layers.ipynb.
+</pre>
+</div>
 </div>
 
 </div>

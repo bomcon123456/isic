@@ -95,7 +95,52 @@ nb_path: "nbs\.ipynb_checkpoints\model-checkpoint.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/models.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>() :: <code>LightningModule</code></p>
+<h2 id="LabelSmoothingCrossEntropy" class="doc_header"><code>class</code> <code>LabelSmoothingCrossEntropy</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LabelSmoothingCrossEntropy</code>(<strong><code>eps</code></strong>:<code>float</code>=<em><code>0.1</code></em>, <strong><code>reduction</code></strong>=<em><code>'mean'</code></em>) :: <code>Module</code></p>
+</blockquote>
+<p>Base class for all neural network modules.</p>
+<p>Your models should also subclass this class.</p>
+<p>Modules can also contain other Modules, allowing to nest them in
+a tree structure. You can assign the submodules as regular attributes::</p>
+
+<pre><code>import torch.nn as nn
+import torch.nn.functional as F
+
+class Model(nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+        self.conv1 = nn.Conv2d(1, 20, 5)
+        self.conv2 = nn.Conv2d(20, 20, 5)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        return F.relu(self.conv2(x))
+
+</code></pre>
+<p>Submodules assigned in this way will be registered, and will have their
+parameters converted too when you call :meth:<code>to</code>, etc.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L39" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>) :: <code>LightningModule</code></p>
 </blockquote>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -154,11 +199,11 @@ inheritance.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ResnetModel</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ResnetModel</span><span class="p">(</span><span class="n">steps_epoch</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
 <span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
 
 <span class="c1"># most basic trainer, uses good defaults</span>
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">MixupDict</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">CutmixDict</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -205,9 +250,10 @@ TPU available: False, using: 0 TPU cores
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>
-  | Name   | Type   | Params
-----------------------------------
-0 | resnet | ResNet | 23 M  
+  | Name      | Type    | Params
+--------------------------------------
+0 | resnet    | ResNet  | 23 M  
+1 | loss_func | MixLoss | 0     
 </pre>
 </div>
 </div>
@@ -215,182 +261,8 @@ TPU available: False, using: 0 TPU cores
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>{&#39;img&#39;: tensor([[[[ 0.6827,  0.6827,  0.7103,  ...,  0.5722,  0.5446,  0.5998],
-          [ 0.6551,  0.7103,  0.7103,  ...,  0.6827,  0.6274,  0.6551],
-          [ 0.6827,  0.7103,  0.6827,  ...,  0.6551,  0.6551,  0.6827],
-          ...,
-          [ 0.5722,  0.5998,  0.6551,  ...,  0.5722,  0.5446,  0.5722],
-          [ 0.6274,  0.5998,  0.6551,  ...,  0.5446,  0.5998,  0.6274],
-          [ 0.5998,  0.5998,  0.5998,  ...,  0.5722,  0.5722,  0.5722]],
-
-         [[ 0.9260,  0.9004,  0.9260,  ...,  0.7978,  0.7209,  0.7722],
-          [ 0.9260,  0.9004,  0.9260,  ...,  0.8748,  0.8235,  0.8491],
-          [ 0.9004,  0.9260,  0.8748,  ...,  0.9004,  0.9004,  0.9260],
-          ...,
-          [ 0.7978,  0.8491,  0.8748,  ...,  0.6440,  0.7209,  0.7978],
-          [ 0.8491,  0.8491,  0.8748,  ...,  0.5928,  0.6697,  0.7466],
-          [ 0.8235,  0.8491,  0.8748,  ...,  0.5415,  0.6440,  0.6953]],
-
-         [[ 1.2796,  1.2796,  1.3026,  ...,  1.1647,  1.0268,  1.1187],
-          [ 1.2796,  1.2796,  1.3026,  ...,  1.2566,  1.1647,  1.2566],
-          [ 1.2566,  1.2796,  1.2566,  ...,  1.2796,  1.2566,  1.3256],
-          ...,
-          [ 1.1877,  1.1877,  1.2566,  ...,  1.1417,  1.2107,  1.2566],
-          [ 1.2107,  1.2107,  1.2566,  ...,  1.0728,  1.1647,  1.2107],
-          [ 1.2107,  1.2107,  1.2566,  ...,  1.0498,  1.1417,  1.1877]]],
-
-
-        [[[ 0.5722,  0.5998,  0.6274,  ...,  0.2408,  0.2684,  0.4065],
-          [ 0.5446,  0.5722,  0.5170,  ...,  0.2684,  0.2132,  0.3513],
-          [ 0.4617,  0.5446,  0.5170,  ...,  0.3513,  0.3513,  0.4617],
-          ...,
-          [ 0.6551,  0.6274,  0.6274,  ...,  0.4617,  0.4341,  0.3237],
-          [ 0.6274,  0.5998,  0.6274,  ...,  0.3789,  0.3237,  0.3237],
-          [ 0.6274,  0.5446,  0.5722,  ...,  0.4065,  0.3789,  0.2960]],
-
-         [[-0.3301, -0.2276, -0.2788,  ..., -1.0222, -1.0479, -0.9453],
-          [-0.3301, -0.2532, -0.3814,  ..., -1.0479, -1.0735, -0.9453],
-          [-0.3301, -0.3045, -0.3814,  ..., -0.9710, -0.9710, -0.8941],
-          ...,
-          [-0.1507, -0.2019, -0.2019,  ..., -0.4070, -0.4326, -0.5352],
-          [-0.2019, -0.2788, -0.2276,  ..., -0.3557, -0.4070, -0.4839],
-          [-0.0994, -0.2019, -0.0994,  ..., -0.4070, -0.3814, -0.4583]],
-
-         [[-0.5588, -0.4898, -0.5128,  ..., -1.1792, -1.1792, -1.0873],
-          [-0.6047, -0.5588, -0.6047,  ..., -1.0873, -1.1562, -1.0413],
-          [-0.6507, -0.6047, -0.6277,  ..., -1.0643, -0.9724, -0.8575],
-          ...,
-          [-0.4898, -0.4898, -0.5128,  ..., -1.0413, -1.0184, -1.1792],
-          [-0.5128, -0.5818, -0.4898,  ..., -0.9494, -0.9954, -1.0643],
-          [-0.5128, -0.5818, -0.4439,  ..., -0.9954, -0.9724, -1.0643]]],
-
-
-        [[[-0.0630, -0.0354, -0.0354,  ...,  0.1303,  0.1303,  0.1027],
-          [-0.0630, -0.0354, -0.0354,  ...,  0.1303,  0.1027,  0.1027],
-          [-0.0630, -0.0077,  0.0199,  ...,  0.1027,  0.1303,  0.1303],
-          ...,
-          [-0.2287, -0.1734,  0.0751,  ...,  0.0751,  0.0751,  0.0751],
-          [-0.2839, -0.2011,  0.0199,  ...,  0.0751,  0.0751,  0.0751],
-          [-0.2839, -0.2287,  0.0199,  ...,  0.0475,  0.0475,  0.0475]],
-
-         [[ 0.4646,  0.5159,  0.5415,  ...,  0.7209,  0.7466,  0.7466],
-          [ 0.4902,  0.5159,  0.5415,  ...,  0.7722,  0.7978,  0.7978],
-          [ 0.4902,  0.5415,  0.5671,  ...,  0.7722,  0.7978,  0.7978],
-          ...,
-          [ 0.3364,  0.3877,  0.6184,  ...,  0.6953,  0.6697,  0.6697],
-          [ 0.3108,  0.3364,  0.5928,  ...,  0.6697,  0.6697,  0.6697],
-          [ 0.2851,  0.3364,  0.6184,  ...,  0.6440,  0.6184,  0.5928]],
-
-         [[ 0.6362,  0.6591,  0.6821,  ...,  0.8430,  0.9119,  0.9349],
-          [ 0.6362,  0.6591,  0.6821,  ...,  0.9349,  0.9579,  0.9579],
-          [ 0.6132,  0.6821,  0.7051,  ...,  0.9349,  0.9579,  0.9809],
-          ...,
-          [ 0.3145,  0.4294,  0.7281,  ...,  0.7511,  0.7281,  0.7281],
-          [ 0.2685,  0.3374,  0.6591,  ...,  0.7511,  0.7281,  0.7281],
-          [ 0.2685,  0.3374,  0.6591,  ...,  0.7281,  0.7051,  0.6821]]],
-
-
-        ...,
-
-
-        [[[ 0.2132,  0.2408,  0.2684,  ...,  0.2132,  0.1303,  0.1580],
-          [ 0.2408,  0.2684,  0.2684,  ...,  0.2132,  0.1580,  0.1856],
-          [ 0.2132,  0.1856,  0.1856,  ...,  0.1856,  0.2408,  0.2408],
-          ...,
-          [ 0.2960,  0.2684,  0.2132,  ...,  0.3237,  0.2960,  0.3237],
-          [ 0.2960,  0.2960,  0.2408,  ...,  0.2684,  0.2960,  0.3237],
-          [ 0.2684,  0.2408,  0.2408,  ...,  0.1856,  0.2684,  0.3237]],
-
-         [[ 1.2336,  1.2849,  1.2593,  ...,  1.2336,  1.1824,  1.2080],
-          [ 1.2336,  1.2336,  1.2080,  ...,  1.2080,  1.1824,  1.2336],
-          [ 1.2080,  1.2080,  1.2336,  ...,  1.2336,  1.2336,  1.2593],
-          ...,
-          [ 1.2593,  1.2080,  1.1567,  ...,  1.3362,  1.3618,  1.3875],
-          [ 1.2593,  1.2336,  1.2080,  ...,  1.3105,  1.3618,  1.3875],
-          [ 1.2336,  1.2336,  1.2080,  ...,  1.2080,  1.3362,  1.3618]],
-
-         [[ 1.1647,  1.1877,  1.1647,  ...,  1.0268,  0.9579,  0.9119],
-          [ 1.1417,  1.1417,  1.1647,  ...,  0.9349,  0.9349,  0.9809],
-          [ 1.0958,  1.1187,  1.1647,  ...,  0.9809,  0.9809,  0.9809],
-          ...,
-          [ 1.0038,  0.9349,  0.8660,  ...,  1.1647,  1.2566,  1.2336],
-          [ 1.0498,  1.0268,  0.9579,  ...,  1.0728,  1.1647,  1.2107],
-          [ 0.9809,  0.9809,  0.9579,  ...,  0.9809,  1.1187,  1.1877]]],
-
-
-        [[[ 1.0693,  1.0693,  1.0417,  ...,  1.2074,  1.1246,  1.1522],
-          [ 1.0417,  1.0417,  1.0417,  ...,  1.2350,  1.2074,  1.1798],
-          [ 1.0693,  1.0417,  1.0417,  ...,  1.2626,  1.2626,  1.1522],
-          ...,
-          [ 0.8208,  0.8760,  0.7931,  ...,  1.0141,  0.9588,  1.0417],
-          [ 0.8208,  0.8484,  0.8208,  ...,  0.9588,  0.9588,  0.9588],
-          [ 0.8760,  0.8484,  0.7931,  ...,  0.9588,  0.9865,  0.9588]],
-
-         [[ 0.2595,  0.2851,  0.2595,  ...,  0.4133,  0.3620,  0.3364],
-          [ 0.2851,  0.2851,  0.2595,  ...,  0.4390,  0.3364,  0.2851],
-          [ 0.2595,  0.2339,  0.2595,  ...,  0.3620,  0.3620,  0.3108],
-          ...,
-          [ 0.1057,  0.1826,  0.0544,  ...,  0.4133,  0.3877,  0.3364],
-          [ 0.1057,  0.0801,  0.0288,  ...,  0.3877,  0.3877,  0.3108],
-          [ 0.1057,  0.1313,  0.0544,  ...,  0.3108,  0.3108,  0.2851]],
-
-         [[ 0.4753,  0.4983,  0.4753,  ...,  0.4753,  0.4294,  0.4064],
-          [ 0.4983,  0.5213,  0.4753,  ...,  0.5442,  0.4983,  0.4294],
-          [ 0.4753,  0.4294,  0.3834,  ...,  0.5672,  0.5213,  0.4294],
-          ...,
-          [ 0.1536,  0.1766,  0.0617,  ...,  0.2915,  0.1996,  0.1306],
-          [ 0.0847,  0.0847,  0.0387,  ...,  0.1996,  0.1306,  0.1076],
-          [ 0.1076,  0.1536,  0.0617,  ...,  0.1306,  0.1536,  0.0617]]],
-
-
-        [[[-0.3944, -0.4496, -0.3944,  ..., -0.1458, -0.1734, -0.1182],
-          [-0.3944, -0.4496, -0.3944,  ..., -0.0354, -0.0906, -0.0630],
-          [-0.3944, -0.4496, -0.3944,  ...,  0.0199, -0.1458, -0.1458],
-          ...,
-          [-0.5049, -0.5877, -0.6429,  ..., -0.2011, -0.2563, -0.2011],
-          [-0.5601, -0.5601, -0.5049,  ..., -0.2839, -0.2839, -0.3115],
-          [-0.6153, -0.5601, -0.4496,  ..., -0.3392, -0.3392, -0.2839]],
-
-         [[ 0.1057,  0.1057,  0.1570,  ...,  0.3108,  0.2339,  0.3108],
-          [ 0.0544,  0.0288,  0.0288,  ...,  0.3877,  0.3877,  0.3877],
-          [ 0.0288, -0.0225,  0.0032,  ...,  0.4390,  0.3877,  0.2851],
-          ...,
-          [-0.1507, -0.2019, -0.2788,  ...,  0.2339,  0.1313,  0.1570],
-          [-0.1507, -0.1507, -0.0994,  ...,  0.2082,  0.1570,  0.1826],
-          [-0.2276, -0.0994, -0.0737,  ...,  0.0801,  0.0544,  0.1313]],
-
-         [[-0.0532, -0.0762, -0.0532,  ...,  0.0617,  0.0387,  0.1306],
-          [-0.1451, -0.1451, -0.1222,  ...,  0.1996,  0.1996,  0.1536],
-          [-0.1451, -0.2141, -0.1681,  ...,  0.3145,  0.2225,  0.0617],
-          ...,
-          [-0.2830, -0.3520, -0.3979,  ...,  0.2685,  0.1766,  0.1766],
-          [-0.2830, -0.2830, -0.2371,  ...,  0.2225,  0.1536,  0.1536],
-          [-0.3290, -0.2371, -0.1911,  ...,  0.0157, -0.0073,  0.0157]]]]), &#39;label&#39;: tensor([0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 4, 2, 0, 4, 4, 5, 4, 4, 5, 4, 0, 4, 4,
-        6, 2, 4, 4, 2, 2, 4, 4, 4, 4, 0, 5, 4, 4, 2, 2, 2, 4, 4, 4, 4, 3, 2, 4,
-        4, 4, 2, 4, 4, 4, 4, 4, 5, 2, 4, 2, 4, 4, 4, 4])}
-tensor([[[0.6827, 0.6827, 0.7103,  ..., 0.5722, 0.5446, 0.5998],
-         [0.6551, 0.7103, 0.7103,  ..., 0.6827, 0.6274, 0.6551],
-         [0.6827, 0.7103, 0.6827,  ..., 0.6551, 0.6551, 0.6827],
-         ...,
-         [0.5722, 0.5998, 0.6551,  ..., 0.5722, 0.5446, 0.5722],
-         [0.6274, 0.5998, 0.6551,  ..., 0.5446, 0.5998, 0.6274],
-         [0.5998, 0.5998, 0.5998,  ..., 0.5722, 0.5722, 0.5722]],
-
-        [[0.9260, 0.9004, 0.9260,  ..., 0.7978, 0.7209, 0.7722],
-         [0.9260, 0.9004, 0.9260,  ..., 0.8748, 0.8235, 0.8491],
-         [0.9004, 0.9260, 0.8748,  ..., 0.9004, 0.9004, 0.9260],
-         ...,
-         [0.7978, 0.8491, 0.8748,  ..., 0.6440, 0.7209, 0.7978],
-         [0.8491, 0.8491, 0.8748,  ..., 0.5928, 0.6697, 0.7466],
-         [0.8235, 0.8491, 0.8748,  ..., 0.5415, 0.6440, 0.6953]],
-
-        [[1.2796, 1.2796, 1.3026,  ..., 1.1647, 1.0268, 1.1187],
-         [1.2796, 1.2796, 1.3026,  ..., 1.2566, 1.1647, 1.2566],
-         [1.2566, 1.2796, 1.2566,  ..., 1.2796, 1.2566, 1.3256],
-         ...,
-         [1.1877, 1.1877, 1.2566,  ..., 1.1417, 1.2107, 1.2566],
-         [1.2107, 1.2107, 1.2566,  ..., 1.0728, 1.1647, 1.2107],
-         [1.2107, 1.2107, 1.2566,  ..., 1.0498, 1.1417, 1.1877]]])
+<pre>hehe
+hehe
 </pre>
 </div>
 </div>
@@ -425,10 +297,10 @@ tensor([[[0.6827, 0.6827, 0.7103,  ..., 0.5722, 0.5446, 0.5998],
   <tbody>
     <tr>
       <td>1</td>
-      <td>1.970</td>
-      <td>0.062500</td>
-      <td>1.856275</td>
-      <td>0.312500</td>
+      <td>1.924</td>
+      <td>0.093750</td>
+      <td>1.694538</td>
+      <td>0.562500</td>
     </tr>
   </tbody>
 </table><p>
@@ -467,76 +339,10 @@ tensor([[[0.6827, 0.6827, 0.7103,  ..., 0.5722, 0.5446, 0.5998],
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ResnetModel</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">ere</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">reload_ext</span> tensorboard
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">hparams</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#34;ere&#34;: 123
-&#34;lr&#34;:  1</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> tensorboard
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>The tensorboard extension is already loaded. To reload it, use:
-  %reload_ext tensorboard
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -565,7 +371,7 @@ tensor([[[0.6827, 0.6827, 0.7103,  ..., 0.5722, 0.5446, 0.5998],
 
 
 <div class="output_text output_subarea ">
-<pre>Reusing TensorBoard on port 6006 (pid 5012), started 0:13:00 ago. (Use &#39;!kill 5012&#39; to kill it.)</pre>
+<pre>Reusing TensorBoard on port 6006 (pid 4636), started 1 day, 1:44:30 ago. (Use &#39;!kill 4636&#39; to kill it.)</pre>
 </div>
 
 </div>
@@ -575,24 +381,38 @@ tensor([[[0.6827, 0.6827, 0.7103,  ..., 0.5722, 0.5446, 0.5998],
 
 <div class="output_html rendered_html output_subarea ">
 
-      <iframe id="tensorboard-frame-2d8d526c3944768c" width="100%" height="800" frameborder="0">
+      <iframe id="tensorboard-frame-e66b67374c344c19" width="100%" height="800" frameborder="0">
       </iframe>
       <script>
         (function() {
-          const frame = document.getElementById("tensorboard-frame-2d8d526c3944768c");
+          const frame = document.getElementById("tensorboard-frame-e66b67374c344c19");
           const url = new URL("/", window.location);
-          const port = 6006;
-          if (port) {
-            url.port = port;
-          }
+          url.port = 6006;
           frame.src = url;
         })();
       </script>
+  
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
     
-</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>tensorboard --logdir<span class="o">=</span>lightning_logs/
+</pre></div>
 
+    </div>
 </div>
 </div>
 
@@ -655,6 +475,38 @@ tensor([[[0.6827, 0.6827, 0.7103,  ..., 0.5722, 0.5446, 0.5998],
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">notebook2script</span><span class="p">(</span><span class="s1">&#39;model.ipynb&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Converted cb_mixup.ipynb.
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 

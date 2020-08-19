@@ -2,12 +2,10 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"HyperparamsLogger": "cb_hyperparamlogger.ipynb",
+index = {"CutmixDict": "cb_cutmix.ipynb",
+         "HyperparamsLogger": "cb_hyperparamlogger.ipynb",
          "text2html_table": "cb_logtable.ipynb",
          "LogTableMetricsCallback": "cb_logtable.ipynb",
-         "NoneReduce": "cb_mixup.ipynb",
-         "reduce_loss": "cb_mixup.ipynb",
-         "Mixup": "cb_mixup.ipynb",
          "MixupDict": "cb_mixup.ipynb",
          "AppConfig": "config.ipynb",
          "PathConfig": "config.ipynb",
@@ -15,20 +13,25 @@ index = {"HyperparamsLogger": "cb_hyperparamlogger.ipynb",
          "hehe": "config.ipynb",
          "heheas": "config.ipynb",
          "AdaptiveConcatPool2d": "layers.ipynb",
+         "MixLoss": "layers.ipynb",
+         "LabelSmoothingCrossEntropy": "model.ipynb",
          "ResnetModel": "model.ipynb",
          "listify": "utils.ipynb",
          "is_listy": "utils.ipynb",
          "camel2snake": "utils.ipynb",
          "snakify_class_name": "utils.ipynb",
          "get_default_device": "utils.ipynb",
-         "unsqueeze": "utils.ipynb"}
+         "unsqueeze": "utils.ipynb",
+         "reduce_loss": "utils.ipynb",
+         "NoneReduce": "utils.ipynb"}
 
-modules = ["callback/hyperlogger.py",
+modules = ["callback/cutmix.py",
+           "callback/hyperlogger.py",
            "callback/logtable.py",
            "callback/mixup.py",
            "config.py",
            "layers.py",
-           "models.py",
+           "model.py",
            "utils.py"]
 
 doc_url = "https://termanteus.github.io/isic/"
