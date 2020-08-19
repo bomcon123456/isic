@@ -95,52 +95,7 @@ nb_path: "nbs\.ipynb_checkpoints\model-checkpoint.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LabelSmoothingCrossEntropy" class="doc_header"><code>class</code> <code>LabelSmoothingCrossEntropy</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LabelSmoothingCrossEntropy</code>(<strong><code>eps</code></strong>:<code>float</code>=<em><code>0.1</code></em>, <strong><code>reduction</code></strong>=<em><code>'mean'</code></em>) :: <code>Module</code></p>
-</blockquote>
-<p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes::</p>
-
-<pre><code>import torch.nn as nn
-import torch.nn.functional as F
-
-class Model(nn.Module):
-    def __init__(self):
-        super(Model, self).__init__()
-        self.conv1 = nn.Conv2d(1, 20, 5)
-        self.conv2 = nn.Conv2d(20, 20, 5)
-
-    def forward(self, x):
-        x = F.relu(self.conv1(x))
-        return F.relu(self.conv2(x))
-
-</code></pre>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call :meth:<code>to</code>, etc.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L39" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>) :: <code>LightningModule</code></p>
+<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>) :: <code>LightningModule</code></p>
 </blockquote>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -261,8 +216,10 @@ TPU available: False, using: 0 TPU cores
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>hehe
-hehe
+<pre>MixLoss(
+  (old_lf): CrossEntropyLoss()
+)
+CrossEntropyLoss()
 </pre>
 </div>
 </div>
@@ -297,10 +254,10 @@ hehe
   <tbody>
     <tr>
       <td>1</td>
-      <td>1.924</td>
-      <td>0.093750</td>
-      <td>1.694538</td>
-      <td>0.562500</td>
+      <td>1.781</td>
+      <td>0.421875</td>
+      <td>1.713330</td>
+      <td>0.437500</td>
     </tr>
   </tbody>
 </table><p>

@@ -32,7 +32,8 @@ class CutmixDict(Callback):
     def on_fit_start(self, trainer, pl_module):
         assert hasattr(pl_module, 'loss_func'), 'Your LightningModule should have loss_func attribute as your loss function.'
         self.old_lf = pl_module.loss_func
-        pl_module.loss_func = MixLoss(self.old_lf, self)
+        self.loss_fnc = MixLoss(self.old_lf, self)
+        pl_module.loss_func = self.loss_fnc
         self.pl_module = pl_module
 
     def _cutmix(self, batch, logger, log_image=False, pre_fix='train'):
@@ -50,7 +51,7 @@ class CutmixDict(Callback):
 
         x1, y1, x2, y2 = self.rand_bbox(W, H, self.lam)
         xb[:, :, x1:x2, y1:y2] = xb_1[:, :, x1:x2, y1:y2]
-        self.lam = (1 - ((x2-x1)*(y2-y1))/float(W*H))
+        self.lam = (1 - ((x2-x1) * (y2-y1)) / float(W*H))
 
         if log_image:
             grid = torchvision.utils.make_grid(xb)
@@ -63,12 +64,18 @@ class CutmixDict(Callback):
         return xb
 
     def on_train_batch_start(self, trainer, pl_module, batch, batch_idx, dataloader_idx):
-        x = self._cutmix(batch, trainer.logger, True)
+        x = self._cutmix(batch, trainer.logger)
         batch["img"] = x
 
-    def on_validation_batch_start(self, trainer, pl_module, batch, batch_idx, dataloader_idx):
-        x = self._cutmix(batch, trainer.logger, True, 'val')
-        batch["img"] = x
+#     def on_validation_batch_start(self, trainer, pl_module, batch, batch_idx, dataloader_idx):
+#         x = self._cutmix(batch, trainer.logger, True, 'val')
+#         batch["img"] = x
+
+    def on_validation_start(self, trainer, pl_module):
+        pl_module.loss_func = self.old_lf
+
+    def on_validation_end(self, trainer, pl_module):
+        pl_module.loss_func = self.loss_fnc
 
     def on_fit_end(self, trainer, pl_module):
         pl_module.loss_func = self.old_lf

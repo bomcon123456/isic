@@ -32,7 +32,8 @@ class MixupDict(Callback):
     def on_fit_start(self, trainer, pl_module):
         assert hasattr(pl_module, 'loss_func'), 'Your LightningModule should have loss_func attribute as your loss function.'
         self.old_lf = pl_module.loss_func
-        pl_module.loss_func = MixLoss(self.old_lf, self)
+        self.loss_fnc = MixLoss(self.old_lf, self)
+        pl_module.loss_func = self.loss_fnc
         self.pl_module = pl_module
 
     def _mixup(self, batch, logger, log_image=False, pre_fix='train'):
@@ -67,9 +68,15 @@ class MixupDict(Callback):
         x = self._mixup(batch, trainer.logger)
         batch["img"] = x
 
-    def on_validation_batch_start(self, trainer, pl_module, batch, batch_idx, dataloader_idx):
-        x = self._mixup(batch, trainer.logger)
-        batch["img"] = x
+#     def on_validation_batch_start(self, trainer, pl_module, batch, batch_idx, dataloader_idx):
+#         x = self._mixup(batch, trainer.logger)
+#         batch["img"] = x
+
+    def on_validation_start(self, trainer, pl_module):
+        pl_module.loss_func = self.old_lf
+
+    def on_validation_end(self, trainer, pl_module):
+        pl_module.loss_func = self.loss_fnc
 
     def on_fit_end(self, trainer, pl_module):
         pl_module.loss_func = self.old_lf
