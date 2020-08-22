@@ -25,7 +25,7 @@ from .utils import reduce_loss
 
 # Cell
 class ResnetModel(LightningModule):
-    def __init__(self, steps_epoch, epochs=30, lr=1e-2):
+    def __init__(self, steps_epoch, epochs=30, lr=1e-2, weight_decay=0.9):
         super().__init__()
         self.save_hyperparameters()
         self.resnet = models.resnet50(pretrained=True)
@@ -39,7 +39,6 @@ class ResnetModel(LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch['img'], batch['label']
         y_hat = self(x)
-        print(self.loss_func)
         loss = self.loss_func(y_hat, y)
         acc = FM.accuracy(y_hat, y, num_classes=7)
         result = pl.TrainResult(minimize=loss)
@@ -50,7 +49,6 @@ class ResnetModel(LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch['img'], batch['label']
         y_hat = self(x)
-        print(self.loss_func)
         loss = self.loss_func(y_hat, y)
         acc = FM.accuracy(y_hat, y, num_classes=7)
         result = pl.EvalResult(checkpoint_on=loss)
@@ -59,7 +57,7 @@ class ResnetModel(LightningModule):
         return result
 
     def configure_optimizers(self):
-        opt = torch.optim.Adam(self.parameters(), lr=1e-2)
+        opt = torch.optim.Adam(self.parameters(), lr=1e-2, weight_decay=self.hparams.wd)
         scheduler = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=self.hparams.lr, steps_per_epoch=self.hparams.steps_epoch, epochs=self.hparams.epochs)
         sched = {
             'scheduler': scheduler, # The LR schduler

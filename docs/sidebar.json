@@ -8,6 +8,7 @@
     "Config": "/config",
     "Layers": "/layers",
     "Models": "/model",
+    "Data Sampler": "/sampler",
     "Utils": "/utils"
   }
 }

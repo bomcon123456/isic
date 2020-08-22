@@ -31,6 +31,9 @@ entries:
       title: Models
       url: /model
     - output: web,pdf
+      title: Data Sampler
+      url: /sampler
+    - output: web,pdf
       title: Utils
       url: /utils
     output: web
