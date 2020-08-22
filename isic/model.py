@@ -16,25 +16,43 @@ from pytorch_lightning.metrics import functional as FM
 
 # Cell
 from .dataset import SkinDataModule
-from .layers import LabelSmoothingCrossEntropy
+from .layers import LabelSmoothingCrossEntropy, LinBnDrop, AdaptiveConcatPool2d
 from .callback.hyperlogger import HyperparamsLogger
 from .callback.logtable import LogTableMetricsCallback
 from .callback.mixup import MixupDict
 from .callback.cutmix import CutmixDict
-from .utils import reduce_loss
+from .utils import reduce_loss, apply_init
 
 # Cell
 class ResnetModel(LightningModule):
-    def __init__(self, steps_epoch, epochs=30, lr=1e-2, weight_decay=0.9):
+    def __init__(self, steps_epoch, epochs=30, lr=1e-2, wd=0.9, n_out=7, concat_pool=True):
         super().__init__()
         self.save_hyperparameters()
-        self.resnet = models.resnet50(pretrained=True)
-        num_ftrs = self.resnet.fc.in_features
-        self.resnet.fc = nn.Linear(num_ftrs, 7)
+        mdl = models.resnet50(pretrained=True)
+        # create body
+        cut = -2
+
+        body = nn.Sequential(*list(mdl.children())[:cut])
+        # create head
+        num_ftrs = mdl.fc.in_features * (2 if concat_pool else 1)
+        lin_ftrs = [num_ftrs, 512, n_out]
+        p = 0.5
+        ps = [p/2] * (len(lin_ftrs) - 2) + [p]
+        actns = [nn.ReLU(inplace=True)] * (len(lin_ftrs) - 2) + [None]
+        pool = AdaptiveConcatPool2d() if concat_pool else nn.AdaptiveAvgPool2d(1)
+        layers = [pool, nn.Flatten()]
+        for ni, no, p, actn in zip(lin_ftrs[:-1], lin_ftrs[1:], ps, actns):
+            layers += LinBnDrop(ni, no, bn=True, p=p, act=actn)
+
+        head = nn.Sequential(*layers)
+        #model
+        self.model = nn.Sequential(body, head)
+        apply_init(self.model[1])
+
         self.loss_func = nn.CrossEntropyLoss()
 
     def forward(self, x):
-        return self.resnet(x)
+        return self.model(x)
 
     def training_step(self, batch, batch_idx):
         x, y = batch['img'], batch['label']
