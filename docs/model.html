@@ -31,7 +31,7 @@ nb_path: "nbs\model.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:23: UserWarning: Unsupported `ReduceOp` for distributed computing.
+<pre>C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:37: UserWarning: Unsupported `ReduceOp` for distributed computing.
   warnings.warn(*args, **kwargs)
 </pre>
 </div>
@@ -53,6 +53,7 @@ nb_path: "nbs\model.ipynb"
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
 
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 
@@ -95,7 +96,118 @@ nb_path: "nbs\model.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ResnetModel" class="doc_header"><code>class</code> <code>ResnetModel</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ResnetModel</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>, <strong><code>weight_decay</code></strong>=<em><code>0.9</code></em>) :: <code>LightningModule</code></p>
+<h4 id="create_head" class="doc_header"><code>create_head</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L29" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_head</code>(<strong><code>n_in</code></strong>, <strong><code>n_out</code></strong>, <strong><code>lin_ftrs</code></strong>=<em><code>None</code></em>, <strong><code>p</code></strong>=<em><code>0.5</code></em>, <strong><code>concat_pool</code></strong>=<em><code>True</code></em>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="params" class="doc_header"><code>params</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>params</code>(<strong><code>m</code></strong>)</p>
+</blockquote>
+<p>Return all parameters of <code>m</code></p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="has_pool_type" class="doc_header"><code>has_pool_type</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L46" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>has_pool_type</code>(<strong><code>m</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="create_body" class="doc_header"><code>create_body</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_body</code>(<strong><code>arch</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Model" class="doc_header"><code>class</code> <code>Model</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L95" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Model</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>, <strong><code>wd</code></strong>=<em><code>0.0</code></em>, <strong><code>n_out</code></strong>=<em><code>7</code></em>, <strong><code>concat_pool</code></strong>=<em><code>True</code></em>, <strong><code>arch</code></strong>=<em><code>'resnet50'</code></em>) :: <code>LightningModule</code></p>
 </blockquote>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -154,11 +266,46 @@ inheritance.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ResnetModel</span><span class="p">(</span><span class="n">steps_epoch</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
-<span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">EPOCHS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">STEPS_EPOCH</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
 
-<span class="c1"># most basic trainer, uses good defaults</span>
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">CutmixDict</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">steps_epoch</span><span class="o">=</span><span class="n">STEPS_EPOCH</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_opt</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
+<span class="n">freeze_cb</span> <span class="o">=</span> <span class="n">FreezeCallback</span><span class="p">()</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">freeze_cb</span><span class="p">],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -171,7 +318,215 @@ inheritance.</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>GPU available: False, used: False
+<pre>Running in fast_dev_run mode: will run a full train, val and test loop using a single batch
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:37: UserWarning: Could not log computational graph since the `model.example_input_array` attribute is not set or `input_array` was not given
+  warnings.warn(*args, **kwargs)
+
+  | Name      | Type             | Params
+-----------------------------------------------
+0 | model     | Sequential       | 25 M  
+1 | loss_func | CrossEntropyLoss | 0     
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>override_called
+[0.001, 0.03162277660168379, 1.0]
+wtf
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>train_acc</th>
+      <th>val_loss</th>
+      <th>val_acc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>3.252</td>
+      <td>0.156250</td>
+      <td>78.051300</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table><p>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Saving latest checkpoint..
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">optimizers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Adam (
+Parameter Group 0
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 4e-05
+    lr: 0.0005200000000000001
+    max_lr: 0.001
+    max_momentum: 0.95
+    min_lr: 4e-09
+    weight_decay: 0.0
+
+Parameter Group 1
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.0012649110640673518
+    lr: 0.016443843832875574
+    max_lr: 0.03162277660168379
+    max_momentum: 0.95
+    min_lr: 1.2649110640673517e-07
+    weight_decay: 0.0
+
+Parameter Group 2
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.04
+    lr: 0.52
+    max_lr: 1.0
+    max_momentum: 0.95
+    min_lr: 4e-06
+    weight_decay: 0.0
+)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
+<span class="n">freeze_cb</span> <span class="o">=</span> <span class="n">FreezeCallback</span><span class="p">()</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">unfreeze_cb</span><span class="p">],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_opt</span><span class="p">(</span><span class="mf">1e-10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Running in fast_dev_run mode: will run a full train, val and test loop using a single batch
+GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
 </pre>
 </div>
@@ -204,10 +559,10 @@ TPU available: False, using: 0 TPU cores
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>
-  | Name      | Type    | Params
---------------------------------------
-0 | resnet    | ResNet  | 23 M  
-1 | loss_func | MixLoss | 0     
+  | Name      | Type             | Params
+-----------------------------------------------
+0 | model     | Sequential       | 25 M  
+1 | loss_func | CrossEntropyLoss | 0     
 </pre>
 </div>
 </div>
@@ -215,92 +570,113 @@ TPU available: False, using: 0 TPU cores
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>MixLoss(
-  (old_lf): CrossEntropyLoss()
-)
+<pre>override_called
+wtf
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-<div class="output_subarea output_text output_error">
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>train_acc</th>
+      <th>val_loss</th>
+      <th>val_acc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>3.256</td>
+      <td>0.156250</td>
+      <td>4.279556</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table><p>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Saving latest checkpoint..
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
 <pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-10-d47d1b932123&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>trainer<span class="ansi-yellow-intense-fg ansi-bold">.</span>fit<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">,</span> dm<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+</pre>
+</div>
+</div>
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\trainer\states.py</span> in <span class="ansi-cyan-fg">wrapped_fn</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">     32</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> entering <span class="ansi-green-intense-fg ansi-bold">is</span> <span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">     33</span>                 self<span class="ansi-yellow-intense-fg ansi-bold">.</span>state <span class="ansi-yellow-intense-fg ansi-bold">=</span> entering
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 34</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>result <span class="ansi-yellow-intense-fg ansi-bold">=</span> fn<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     35</span> 
-<span class="ansi-green-fg">     36</span>             <span class="ansi-red-intense-fg ansi-bold"># The INTERRUPTED state can be set inside the run function. To indicate that run was interrupted</span>
+<div class="output_area">
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\trainer\trainer.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-intense-fg ansi-bold">(self, model, train_dataloader, val_dataloaders, datamodule)</span>
-<span class="ansi-green-fg">   1067</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>accelerator_backend <span class="ansi-yellow-intense-fg ansi-bold">=</span> CPUBackend<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">   1068</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>accelerator_backend<span class="ansi-yellow-intense-fg ansi-bold">.</span>setup<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1069</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>results <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>accelerator_backend<span class="ansi-yellow-intense-fg ansi-bold">.</span>train<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">   1070</span> 
-<span class="ansi-green-fg">   1071</span>         <span class="ansi-red-intense-fg ansi-bold"># on fit end callback</span>
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\accelerators\cpu_backend.py</span> in <span class="ansi-cyan-fg">train</span><span class="ansi-blue-intense-fg ansi-bold">(self, model)</span>
-<span class="ansi-green-fg">     37</span> 
-<span class="ansi-green-fg">     38</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> train<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> model<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 39</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>results <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>trainer<span class="ansi-yellow-intense-fg ansi-bold">.</span>run_pretrain_routine<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     40</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> results
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\trainer\trainer.py</span> in <span class="ansi-cyan-fg">run_pretrain_routine</span><span class="ansi-blue-intense-fg ansi-bold">(self, model)</span>
-<span class="ansi-green-fg">   1207</span> 
-<span class="ansi-green-fg">   1208</span>         <span class="ansi-red-intense-fg ansi-bold"># run a few val batches before training starts</span>
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1209</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_run_sanity_check<span class="ansi-yellow-intense-fg ansi-bold">(</span>ref_model<span class="ansi-yellow-intense-fg ansi-bold">,</span> model<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">   1210</span> 
-<span class="ansi-green-fg">   1211</span>         <span class="ansi-red-intense-fg ansi-bold"># clear cache before training</span>
+<div class="output_text output_subarea output_execute_result">
+<pre>1</pre>
+</div>
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\trainer\trainer.py</span> in <span class="ansi-cyan-fg">_run_sanity_check</span><span class="ansi-blue-intense-fg ansi-bold">(self, ref_model, model)</span>
-<span class="ansi-green-fg">   1240</span>             num_loaders <span class="ansi-yellow-intense-fg ansi-bold">=</span> len<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>val_dataloaders<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">   1241</span>             max_batches <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>num_sanity_val_steps<span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span> num_loaders
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1242</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>eval_results <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_evaluate<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">,</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>val_dataloaders<span class="ansi-yellow-intense-fg ansi-bold">,</span> max_batches<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">   1243</span> 
-<span class="ansi-green-fg">   1244</span>             <span class="ansi-red-intense-fg ansi-bold"># allow no returns from eval</span>
+</div>
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\trainer\evaluation_loop.py</span> in <span class="ansi-cyan-fg">_evaluate</span><span class="ansi-blue-intense-fg ansi-bold">(self, model, dataloaders, max_batches, test_mode)</span>
-<span class="ansi-green-fg">    331</span>                         output <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>evaluation_forward<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">,</span> batch<span class="ansi-yellow-intense-fg ansi-bold">,</span> batch_idx<span class="ansi-yellow-intense-fg ansi-bold">,</span> dataloader_idx<span class="ansi-yellow-intense-fg ansi-bold">,</span> test_mode<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    332</span>                 <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 333</span><span class="ansi-yellow-intense-fg ansi-bold">                     </span>output <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>evaluation_forward<span class="ansi-yellow-intense-fg ansi-bold">(</span>model<span class="ansi-yellow-intense-fg ansi-bold">,</span> batch<span class="ansi-yellow-intense-fg ansi-bold">,</span> batch_idx<span class="ansi-yellow-intense-fg ansi-bold">,</span> dataloader_idx<span class="ansi-yellow-intense-fg ansi-bold">,</span> test_mode<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    334</span> 
-<span class="ansi-green-fg">    335</span>                 is_result_obj <span class="ansi-yellow-intense-fg ansi-bold">=</span> isinstance<span class="ansi-yellow-intense-fg ansi-bold">(</span>output<span class="ansi-yellow-intense-fg ansi-bold">,</span> Result<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+</div>
+</div>
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\trainer\evaluation_loop.py</span> in <span class="ansi-cyan-fg">evaluation_forward</span><span class="ansi-blue-intense-fg ansi-bold">(self, model, batch, batch_idx, dataloader_idx, test_mode)</span>
-<span class="ansi-green-fg">    680</span>             output <span class="ansi-yellow-intense-fg ansi-bold">=</span> model<span class="ansi-yellow-intense-fg ansi-bold">.</span>test_step<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    681</span>         <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 682</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>output <span class="ansi-yellow-intense-fg ansi-bold">=</span> model<span class="ansi-yellow-intense-fg ansi-bold">.</span>validation_step<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    683</span> 
-<span class="ansi-green-fg">    684</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> output
+</div>
+    {% endraw %}
 
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-4-9401fb3ff232&gt;</span> in <span class="ansi-cyan-fg">validation_step</span><span class="ansi-blue-intense-fg ansi-bold">(self, batch, batch_idx)</span>
-<span class="ansi-green-fg">     27</span>         y_hat <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     28</span>         print<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>loss_func<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 29</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>loss <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>loss_func<span class="ansi-yellow-intense-fg ansi-bold">(</span>y_hat<span class="ansi-yellow-intense-fg ansi-bold">,</span> y<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     30</span>         acc <span class="ansi-yellow-intense-fg ansi-bold">=</span> FM<span class="ansi-yellow-intense-fg ansi-bold">.</span>accuracy<span class="ansi-yellow-intense-fg ansi-bold">(</span>y_hat<span class="ansi-yellow-intense-fg ansi-bold">,</span> y<span class="ansi-yellow-intense-fg ansi-bold">,</span> num_classes<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-cyan-intense-fg ansi-bold">7</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     31</span>         result <span class="ansi-yellow-intense-fg ansi-bold">=</span> pl<span class="ansi-yellow-intense-fg ansi-bold">.</span>EvalResult<span class="ansi-yellow-intense-fg ansi-bold">(</span>checkpoint_on<span class="ansi-yellow-intense-fg ansi-bold">=</span>loss<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-<span class="ansi-green-intense-fg ansi-bold">~\miniconda3\envs\devtorch\lib\site-packages\torch\nn\modules\module.py</span> in <span class="ansi-cyan-fg">_call_impl</span><span class="ansi-blue-intense-fg ansi-bold">(self, *input, **kwargs)</span>
-<span class="ansi-green-fg">    720</span>             result <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_slow_forward<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>input<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    721</span>         <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 722</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>result <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>forward<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>input<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    723</span>         for hook in itertools.chain(
-<span class="ansi-green-fg">    724</span>                 _global_forward_hooks<span class="ansi-yellow-intense-fg ansi-bold">.</span>values<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">print_grad_module</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
 
-<span class="ansi-green-intense-fg ansi-bold">d:\workspace\ml\ham10000\isic\isic\layers.py</span> in <span class="ansi-cyan-fg">forward</span><span class="ansi-blue-intense-fg ansi-bold">(self, pred, yb)</span>
-<span class="ansi-green-fg">     30</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mixup_cb<span class="ansi-yellow-intense-fg ansi-bold">.</span>pl_module<span class="ansi-yellow-intense-fg ansi-bold">.</span>testing<span class="ansi-yellow-intense-fg ansi-bold">:</span> <span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>old_lf<span class="ansi-yellow-intense-fg ansi-bold">(</span>pred<span class="ansi-yellow-intense-fg ansi-bold">,</span> yb<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     31</span>         <span class="ansi-green-intense-fg ansi-bold">with</span> NoneReduce<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>old_lf<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">as</span> lf<span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 32</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mixup_cb<span class="ansi-yellow-intense-fg ansi-bold">.</span>yb_1 <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mixup_cb<span class="ansi-yellow-intense-fg ansi-bold">.</span>yb_1<span class="ansi-yellow-intense-fg ansi-bold">.</span>to<span class="ansi-yellow-intense-fg ansi-bold">(</span>pred<span class="ansi-yellow-intense-fg ansi-bold">.</span>device<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     33</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mixup_cb<span class="ansi-yellow-intense-fg ansi-bold">.</span>lam <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mixup_cb<span class="ansi-yellow-intense-fg ansi-bold">.</span>lam<span class="ansi-yellow-intense-fg ansi-bold">.</span>to<span class="ansi-yellow-intense-fg ansi-bold">(</span>pred<span class="ansi-yellow-intense-fg ansi-bold">.</span>device<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">     34</span>             loss <span class="ansi-yellow-intense-fg ansi-bold">=</span> torch<span class="ansi-yellow-intense-fg ansi-bold">.</span>lerp<span class="ansi-yellow-intense-fg ansi-bold">(</span>lf<span class="ansi-yellow-intense-fg ansi-bold">(</span>pred<span class="ansi-yellow-intense-fg ansi-bold">,</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mixup_cb<span class="ansi-yellow-intense-fg ansi-bold">.</span>yb_1<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> lf<span class="ansi-yellow-intense-fg ansi-bold">(</span>pred<span class="ansi-yellow-intense-fg ansi-bold">,</span>yb<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>mixup_cb<span class="ansi-yellow-intense-fg ansi-bold">.</span>lam<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+    </div>
+</div>
+</div>
 
-<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: &#39;CutmixDict&#39; object has no attribute &#39;yb_1&#39;</pre>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>AdaptiveAvgPool2d(output_size=1)
+[]
+AdaptiveMaxPool2d(output_size=1)
+[]
+Flatten()
+[]
+BatchNorm1d(4096, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Dropout(p=0.25, inplace=False)
+[]
+Linear(in_features=4096, out_features=512, bias=False)
+[True]
+ReLU(inplace=True)
+[]
+BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Dropout(p=0.5, inplace=False)
+[]
+Linear(in_features=512, out_features=7, bias=False)
+[True]
+</pre>
 </div>
 </div>
 
@@ -317,7 +693,7 @@ TPU available: False, using: 0 TPU cores
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">reload_ext</span> tensorboard
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> tensorboard
 </pre></div>
 
     </div>
@@ -349,7 +725,7 @@ TPU available: False, using: 0 TPU cores
 
 
 <div class="output_text output_subarea ">
-<pre>Reusing TensorBoard on port 6006 (pid 4636), started 1 day, 1:44:30 ago. (Use &#39;!kill 4636&#39; to kill it.)</pre>
+<pre>Reusing TensorBoard on port 6006 (pid 4636), started 4 days, 18:33:26 ago. (Use &#39;!kill 4636&#39; to kill it.)</pre>
 </div>
 
 </div>
@@ -359,11 +735,11 @@ TPU available: False, using: 0 TPU cores
 
 <div class="output_html rendered_html output_subarea ">
 
-      <iframe id="tensorboard-frame-e66b67374c344c19" width="100%" height="800" frameborder="0">
+      <iframe id="tensorboard-frame-7752bba96d9fd24c" width="100%" height="800" frameborder="0">
       </iframe>
       <script>
         (function() {
-          const frame = document.getElementById("tensorboard-frame-e66b67374c344c19");
+          const frame = document.getElementById("tensorboard-frame-7752bba96d9fd24c");
           const url = new URL("/", window.location);
           url.port = 6006;
           frame.src = url;

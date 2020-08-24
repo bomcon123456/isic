@@ -64,6 +64,7 @@ class HyperparamsLogger(Callback):
                 'logging_interval should be `step` or `epoch` or `None`.'
             )
 
+        super().__init__()
         self.logging_interval = logging_interval
         self.lrs = None
         self.mms = None
@@ -74,6 +75,7 @@ class HyperparamsLogger(Callback):
             schedulers in the case of multiple of the same type or in
             the case of multiple parameter groups
         """
+        print('wtf')
         if not trainer.logger:
             raise MisconfigurationException(
                 'Cannot use LearningRateLogger callback with Trainer that has no logger.'

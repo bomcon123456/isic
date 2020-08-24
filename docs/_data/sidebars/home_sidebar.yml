@@ -13,6 +13,9 @@ entries:
       title: Cutmix Callback
       url: /cb_cutmix
     - output: web,pdf
+      title: Freeze/ Unfreeze Callback
+      url: /cb_freeze
+    - output: web,pdf
       title: HyperparamsLoggerCallback
       url: /cb_hyperparamlogger
     - output: web,pdf
@@ -36,6 +39,9 @@ entries:
     - output: web,pdf
       title: Utils
       url: /utils
+    - output: web,pdf
+      title: Title
+      url: /utils_model
     output: web
     title: isic
   output: web

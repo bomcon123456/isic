@@ -2,6 +2,7 @@
   "isic": {
     "Overview": "/",
     "Cutmix Callback": "/cb_cutmix",
+    "Freeze/ Unfreeze Callback": "/cb_freeze",
     "HyperparamsLoggerCallback": "/cb_hyperparamlogger",
     "LogTableMetricsCallback": "/cb_logtable",
     "Mixup Callback": "/cb_mixup",
@@ -9,6 +10,7 @@
     "Layers": "/layers",
     "Models": "/model",
     "Data Sampler": "/sampler",
-    "Utils": "/utils"
+    "Utils": "/utils",
+    "Title": "/utils_model"
   }
 }

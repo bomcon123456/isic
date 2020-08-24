@@ -40,6 +40,7 @@ def text2html_table(items):
 #export
 class LogTableMetricsCallback(Callback):
     def __init__(self):
+        super().__init__()
         self.metrics = []
         self.headers = []
         self.rows = []
