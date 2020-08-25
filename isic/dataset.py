@@ -44,9 +44,9 @@ class SkinLabels():
     }
 
 # Cell
-def preprocess_df(df, valid_size=0.2, seed=AppConfig.SEED, image_label_only=False):
+def preprocess_df(df, img_path = PathConfig.IMAGE_PATH, valid_size=0.2, seed=AppConfig.SEED, image_label_only=False):
 
-    df['path'] = PathConfig.IMAGE_PATH + '/' + df['image_id'] + '.jpg'
+    df['path'] = img_path + '/' + df['image_id'] + '.jpg'
     df['label_fullstr'] = df['dx'].map(SkinLabels.lesion_type_dict.get)
 
     label_str = pd.Categorical(df['label_fullstr'])
