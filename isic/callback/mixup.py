@@ -20,7 +20,7 @@ from pytorch_lightning.callbacks.base import Callback
 from pytorch_lightning.utilities import rank_zero_info, rank_zero_warn
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
 
-from ..utils import unsqueeze, reduce_loss, NoneReduce
+from ..utils.core import unsqueeze, reduce_loss, NoneReduce
 from ..layers import MixLoss
 
 # Cell

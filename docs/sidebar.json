@@ -11,6 +11,6 @@
     "Models": "/model",
     "Data Sampler": "/sampler",
     "Utils": "/utils",
-    "Title": "/utils_model"
+    "UtilsModel": "/utils_model"
   }
 }

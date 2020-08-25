@@ -5,7 +5,7 @@ __all__ = ['HyperparamsLogger']
 # Cell
 import copy
 from itertools import zip_longest
-from typing import List, Any, Dict, Callable
+from typing import List, Any, Dict, Callable, Optional
 
 from IPython.display import clear_output, display, HTML
 
@@ -18,16 +18,10 @@ import pytorch_lightning as pl
 from pytorch_lightning.core import LightningModule
 from pytorch_lightning.metrics import functional as FM
 from pytorch_lightning.callbacks import Callback
-from pytorch_lightning.utilities import rank_zero_info
-
-# Cell
-from typing import Optional
-
-from pytorch_lightning.callbacks.base import Callback
-from pytorch_lightning.utilities import rank_zero_warn
+from pytorch_lightning.utilities import rank_zero_info, rank_zero_warn
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
 
-
+# Cell
 class HyperparamsLogger(Callback):
     r"""
     Automatically logs learning rate for learning rate schedulers during training.
@@ -75,7 +69,6 @@ class HyperparamsLogger(Callback):
             schedulers in the case of multiple of the same type or in
             the case of multiple parameter groups
         """
-        print('wtf')
         if not trainer.logger:
             raise MisconfigurationException(
                 'Cannot use LearningRateLogger callback with Trainer that has no logger.'

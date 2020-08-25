@@ -40,7 +40,7 @@ entries:
       title: Utils
       url: /utils
     - output: web,pdf
-      title: Title
+      title: UtilsModel
       url: /utils_model
     output: web
     title: isic

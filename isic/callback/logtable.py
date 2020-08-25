@@ -6,6 +6,7 @@ __all__ = ['text2html_table', 'LogTableMetricsCallback']
 import copy
 from itertools import zip_longest
 from typing import List, Any, Dict, Callable
+import time
 
 from IPython.display import clear_output, display, HTML
 
@@ -19,6 +20,8 @@ from pytorch_lightning.core import LightningModule
 from pytorch_lightning.metrics import functional as FM
 from pytorch_lightning.callbacks import Callback
 from pytorch_lightning.utilities import rank_zero_info
+
+from ..utils.core import format_time
 
 # Cell
 def text2html_table(items):
@@ -46,7 +49,11 @@ class LogTableMetricsCallback(Callback):
         self.rows = []
         self.out = None
 
+    def on_epoch_start(self, trainer, pl_module):
+        self.start = time.time()
+
     def on_epoch_end(self, trainer, pl_module):
+        t = format_time(time.time() - self.start)
         metrics = copy.copy(trainer.progress_bar_dict)
         if 'v_num' in metrics.keys():
             del metrics['v_num']
@@ -57,6 +64,7 @@ class LogTableMetricsCallback(Callback):
                     self.headers.append('train_loss')
                 else:
                     self.headers.append(k)
+            self.headers.append('time')
         row = []
         row.append(trainer.current_epoch + 1)
         for header in self.headers:
@@ -64,6 +72,7 @@ class LogTableMetricsCallback(Callback):
                 header = 'loss'
             if header in metrics:
                 row.append(metrics[header])
+        row.append(t)
         row = [f"{v:.6f}" if isinstance(v, float) else str(v) for v in row]
         self.rows.append(row)
         if not self.out:

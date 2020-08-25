@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .utils import reduce_loss, NoneReduce
+from .utils.core import reduce_loss, NoneReduce
 
 # Cell
 class AdaptiveConcatPool2d(nn.Module):

@@ -74,7 +74,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="listify" class="doc_header"><code>listify</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L19" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>listify</code>(<strong><code>o</code></strong>)</p>
+<h4 id="listify" class="doc_header"><code>listify</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L18" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>listify</code>(<strong><code>o</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -105,7 +105,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="is_listy" class="doc_header"><code>is_listy</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L27" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_listy</code>(<strong><code>x</code></strong>)</p>
+<h4 id="is_listy" class="doc_header"><code>is_listy</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L26" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_listy</code>(<strong><code>x</code></strong>)</p>
 </blockquote>
 <p><code>isinstance(x, (tuple,list,L))</code></p>
 
@@ -137,7 +137,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="camel2snake" class="doc_header"><code>camel2snake</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>camel2snake</code>(<strong><code>name</code></strong>)</p>
+<h4 id="camel2snake" class="doc_header"><code>camel2snake</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L35" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>camel2snake</code>(<strong><code>name</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -168,7 +168,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="snakify_class_name" class="doc_header"><code>snakify_class_name</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L41" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snakify_class_name</code>(<strong><code>obj</code></strong>, <strong><code>cls_name</code></strong>)</p>
+<h4 id="snakify_class_name" class="doc_header"><code>snakify_class_name</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L40" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snakify_class_name</code>(<strong><code>obj</code></strong>, <strong><code>cls_name</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -199,7 +199,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_default_device" class="doc_header"><code>get_default_device</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L45" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_default_device</code>(<strong><code>use_cuda</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="get_default_device" class="doc_header"><code>get_default_device</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L44" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_default_device</code>(<strong><code>use_cuda</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Return or set default device; <code>use_cuda</code>: None - CUDA if available; True - error if not availabe; False - CPU</p>
 
@@ -231,7 +231,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="unsqueeze" class="doc_header"><code>unsqueeze</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L53" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unsqueeze</code>(<strong><code>x</code></strong>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n</code></strong>=<em><code>1</code></em>)</p>
+<h4 id="unsqueeze" class="doc_header"><code>unsqueeze</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L51" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unsqueeze</code>(<strong><code>x</code></strong>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n</code></strong>=<em><code>1</code></em>)</p>
 </blockquote>
 <p>Same as <code>torch.unsqueeze</code> but can add <code>n</code> dims</p>
 
@@ -263,7 +263,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="reduce_loss" class="doc_header"><code>reduce_loss</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>reduce_loss</code>(<strong><code>loss</code></strong>, <strong><code>reduction</code></strong>=<em><code>'mean'</code></em>)</p>
+<h4 id="reduce_loss" class="doc_header"><code>reduce_loss</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L57" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>reduce_loss</code>(<strong><code>loss</code></strong>, <strong><code>reduction</code></strong>=<em><code>'mean'</code></em>)</p>
 </blockquote>
 
 </div>
@@ -294,7 +294,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NoneReduce" class="doc_header"><code>class</code> <code>NoneReduce</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L63" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NoneReduce</code>(<strong><code>loss_func</code></strong>)</p>
+<h2 id="NoneReduce" class="doc_header"><code>class</code> <code>NoneReduce</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L61" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NoneReduce</code>(<strong><code>loss_func</code></strong>)</p>
 </blockquote>
 <p>A context manager to evaluate <code>loss_func</code> with none reduce.</p>
 
@@ -326,235 +326,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="requires_grad" class="doc_header"><code>requires_grad</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L79" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>requires_grad</code>(<strong><code>m</code></strong>)</p>
-</blockquote>
-<p>Check if the first parameter of <code>m</code> requires grad or not</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="init_default" class="doc_header"><code>init_default</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>init_default</code>(<strong><code>m</code></strong>, <strong><code>func</code></strong>=<em><code>'kaiming_normal_'</code></em>)</p>
-</blockquote>
-<p>Initialize <code>m</code> weights with <code>func</code> and set <code>bias</code> to 0.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="cond_init" class="doc_header"><code>cond_init</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cond_init</code>(<strong><code>m</code></strong>, <strong><code>func</code></strong>)</p>
-</blockquote>
-<p>Apply <a href="/isic/utils#init_default"><code>init_default</code></a> to <code>m</code> unless it's a batchnorm module</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="apply_leaf" class="doc_header"><code>apply_leaf</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L98" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>apply_leaf</code>(<strong><code>m</code></strong>, <strong><code>f</code></strong>)</p>
-</blockquote>
-<p>Apply <code>f</code> to children of <code>m</code>.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="apply_init" class="doc_header"><code>apply_init</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L105" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>apply_init</code>(<strong><code>m</code></strong>, <strong><code>func</code></strong>=<em><code>'kaiming_normal_'</code></em>)</p>
-</blockquote>
-<p>Initialize all non-batchnorm layers of <code>m</code> with <code>func</code>.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_bias_batchnorm_params" class="doc_header"><code>get_bias_batchnorm_params</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_bias_batchnorm_params</code>(<strong><code>m</code></strong>, <strong><code>with_bias</code></strong>=<em><code>True</code></em>)</p>
-</blockquote>
-<p>Return all bias and and BatchNorm params</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="print_grad_block" class="doc_header"><code>print_grad_block</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L124" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>print_grad_block</code>(<strong><code>ms</code></strong>)</p>
-</blockquote>
-<p>This version still print block module</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="print_grad_module" class="doc_header"><code>print_grad_module</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L137" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>print_grad_module</code>(<strong><code>ms</code></strong>)</p>
-</blockquote>
-<p>This version only print the smallest module</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="even_mults" class="doc_header"><code>even_mults</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L153" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>even_mults</code>(<strong><code>start</code></strong>, <strong><code>stop</code></strong>, <strong><code>n</code></strong>)</p>
+<h4 id="even_mults" class="doc_header"><code>even_mults</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L77" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>even_mults</code>(<strong><code>start</code></strong>, <strong><code>stop</code></strong>, <strong><code>n</code></strong>)</p>
 </blockquote>
 <p>Build log-stepped array from <code>start</code> to <code>stop</code> in <code>n</code> steps.</p>
 
@@ -586,8 +358,40 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_val_steps" class="doc_header"><code>generate_val_steps</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils.py#L161" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_val_steps</code>(<strong><code>val</code></strong>, <strong><code>n</code></strong>)</p>
+<h4 id="generate_val_steps" class="doc_header"><code>generate_val_steps</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L85" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_val_steps</code>(<strong><code>val</code></strong>, <strong><code>n</code></strong>)</p>
 </blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="format_time" class="doc_header"><code>format_time</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_time</code>(<strong><code>t</code></strong>)</p>
+</blockquote>
+<p>Format <code>t</code> (in seconds) to (h):mm:ss</p>
 
 </div>
 

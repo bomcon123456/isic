@@ -96,118 +96,7 @@ nb_path: "nbs\.ipynb_checkpoints\model-checkpoint.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_head" class="doc_header"><code>create_head</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L29" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_head</code>(<strong><code>n_in</code></strong>, <strong><code>n_out</code></strong>, <strong><code>lin_ftrs</code></strong>=<em><code>None</code></em>, <strong><code>p</code></strong>=<em><code>0.5</code></em>, <strong><code>concat_pool</code></strong>=<em><code>True</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="params" class="doc_header"><code>params</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>params</code>(<strong><code>m</code></strong>)</p>
-</blockquote>
-<p>Return all parameters of <code>m</code></p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="has_pool_type" class="doc_header"><code>has_pool_type</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L46" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>has_pool_type</code>(<strong><code>m</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_body" class="doc_header"><code>create_body</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_body</code>(<strong><code>arch</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="Model" class="doc_header"><code>class</code> <code>Model</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L95" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Model</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>, <strong><code>wd</code></strong>=<em><code>0.0</code></em>, <strong><code>n_out</code></strong>=<em><code>7</code></em>, <strong><code>concat_pool</code></strong>=<em><code>True</code></em>, <strong><code>arch</code></strong>=<em><code>'resnet50'</code></em>) :: <code>LightningModule</code></p>
+<h2 id="Model" class="doc_header"><code>class</code> <code>Model</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Model</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>, <strong><code>wd</code></strong>=<em><code>0.0</code></em>, <strong><code>n_out</code></strong>=<em><code>7</code></em>, <strong><code>concat_pool</code></strong>=<em><code>True</code></em>, <strong><code>arch</code></strong>=<em><code>'resnet50'</code></em>) :: <code>LightningModule</code></p>
 </blockquote>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -284,8 +173,8 @@ inheritance.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">steps_epoch</span><span class="o">=</span><span class="n">STEPS_EPOCH</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">create_opt</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">steps_epoch</span><span class="o">=</span><span class="n">STEPS_EPOCH</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="s1">&#39;resnet18&#39;</span><span class="p">)</span>
+<span class="n">n_groups</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create_opt</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -302,10 +191,24 @@ inheritance.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
-<span class="n">freeze_cb</span> <span class="o">=</span> <span class="n">FreezeCallback</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">freeze</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">n_groups</span><span class="p">)</span>
+</pre></div>
 
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">freeze_cb</span><span class="p">],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lr_find</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span><span class="n">lr_find</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -320,6 +223,193 @@ inheritance.</p>
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Running in fast_dev_run mode: will run a full train, val and test loop using a single batch
 GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:37: UserWarning: Could not log computational graph since the `model.example_input_array` attribute is not set or `input_array` was not given
+  warnings.warn(*args, **kwargs)
+
+  | Name      | Type                       | Params
+---------------------------------------------------------
+0 | model     | Sequential                 | 11 M  
+1 | loss_func | LabelSmoothingCrossEntropy | 0     
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>override_called
+[0.0001, 0.0001, 0.001]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Saving latest checkpoint..
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+[False]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+[]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[False]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[False]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[False]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+ReLU(inplace=True)
+[]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[False]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+--------------------------------------------------------------------------------
+AdaptiveAvgPool2d(output_size=1)
+[]
+AdaptiveMaxPool2d(output_size=1)
+[]
+Flatten()
+[]
+BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Dropout(p=0.25, inplace=False)
+[]
+Linear(in_features=1024, out_features=512, bias=False)
+[True]
+ReLU(inplace=True)
+[]
+BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[True, True]
+Dropout(p=0.5, inplace=False)
+[]
+Linear(in_features=512, out_features=7, bias=False)
+[True]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
 </pre>
 </div>
@@ -354,10 +444,10 @@ TPU available: False, using: 0 TPU cores
 <pre>C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:37: UserWarning: Could not log computational graph since the `model.example_input_array` attribute is not set or `input_array` was not given
   warnings.warn(*args, **kwargs)
 
-  | Name      | Type             | Params
------------------------------------------------
-0 | model     | Sequential       | 25 M  
-1 | loss_func | CrossEntropyLoss | 0     
+  | Name      | Type                       | Params
+---------------------------------------------------------
+0 | model     | Sequential                 | 25 M  
+1 | loss_func | LabelSmoothingCrossEntropy | 0     
 </pre>
 </div>
 </div>
@@ -366,44 +456,17 @@ TPU available: False, using: 0 TPU cores
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>override_called
-[0.001, 0.03162277660168379, 1.0]
-wtf
+[0.0001, 0.0001, 0.001]
 </pre>
 </div>
 </div>
 
 <div class="output_area">
 
-
-<div class="output_html rendered_html output_subarea ">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: left;">
-      <th>epoch</th>
-      <th>train_loss</th>
-      <th>train_acc</th>
-      <th>val_loss</th>
-      <th>val_acc</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>3.252</td>
-      <td>0.156250</td>
-      <td>78.051300</td>
-      <td>0.000000</td>
-    </tr>
-  </tbody>
-</table><p>
-</div>
-
-</div>
-
-<div class="output_area">
-
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Saving latest checkpoint..
+<pre>C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:37: UserWarning: Detected KeyboardInterrupt, attempting graceful shutdown...
+  warnings.warn(*args, **kwargs)
+Saving latest checkpoint..
 </pre>
 </div>
 </div>
@@ -643,56 +706,6 @@ wtf
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">print_grad_module</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>AdaptiveAvgPool2d(output_size=1)
-[]
-AdaptiveMaxPool2d(output_size=1)
-[]
-Flatten()
-[]
-BatchNorm1d(4096, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-[True, True]
-Dropout(p=0.25, inplace=False)
-[]
-Linear(in_features=4096, out_features=512, bias=False)
-[True]
-ReLU(inplace=True)
-[]
-BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-[True, True]
-Dropout(p=0.5, inplace=False)
-[]
-Linear(in_features=512, out_features=7, bias=False)
-[True]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> tensorboard
 </pre></div>
 
@@ -750,85 +763,6 @@ Linear(in_features=512, out_features=7, bias=False)
 
 </div>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>tensorboard --logdir<span class="o">=</span>lightning_logs/
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class ResnetModel(LightningModule):</span>
-<span class="c1">#     def __init__(self):</span>
-<span class="c1">#         super().__init__()</span>
-<span class="c1"># #         self.save_hyperparameters()</span>
-<span class="c1">#         self.resnet = models.resnet50(pretrained=True)</span>
-<span class="c1">#         num_ftrs = self.resnet.fc.in_features</span>
-<span class="c1">#         self.resnet.fc = nn.Linear(num_ftrs, 7)</span>
-<span class="c1">#         self.loss_func = F.cross_entropy</span>
-
-<span class="c1">#     def forward(self, x):</span>
-<span class="c1">#         return self.resnet(x)</span>
-
-<span class="c1">#     def training_step(self, batch, batch_idx):</span>
-<span class="c1">#         print(batch)</span>
-<span class="c1">#         if hasattr(self, &#39;enhanced_batch&#39;):</span>
-<span class="c1">#             print(&#39;hehe&#39;)</span>
-<span class="c1">#             batch = self.enhanced_batch</span>
-<span class="c1">#         x, y = batch</span>
-<span class="c1">#         y_hat = self(x)</span>
-<span class="c1">#         loss = self.loss_func(y_hat, y)</span>
-<span class="c1">#         acc = FM.accuracy(y_hat, y, num_classes=7)</span>
-<span class="c1">#         result = pl.TrainResult(minimize=loss)</span>
-<span class="c1">#         result.log(&#39;train_loss&#39;, loss)</span>
-<span class="c1">#         result.log(&#39;train_acc&#39;, acc, prog_bar=True)</span>
-<span class="c1">#         return result</span>
-
-<span class="c1">#     def validation_step(self, batch, batch_idx):</span>
-<span class="c1">#         x, y = batch</span>
-<span class="c1">#         y_hat = self(x)</span>
-<span class="c1">#         loss = F.cross_entropy(y_hat, y)</span>
-<span class="c1">#         acc = FM.accuracy(y_hat, y, num_classes=7)</span>
-<span class="c1">#         result = pl.EvalResult(checkpoint_on=loss)</span>
-<span class="c1">#         result.log(&#39;val_loss&#39;, loss, prog_bar=True) </span>
-<span class="c1">#         result.log(&#39;val_acc&#39;, acc, prog_bar=True)</span>
-<span class="c1">#         return result</span>
-
-<span class="c1">#     def configure_optimizers(self):</span>
-<span class="c1">#         opt = torch.optim.Adam(self.parameters(), lr=1e-2)</span>
-<span class="c1">#         scheduler = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=1e-2, steps_per_epoch=140, epochs=10)</span>
-<span class="c1">#         sched = {</span>
-<span class="c1">#             &#39;scheduler&#39;: scheduler, # The LR schduler</span>
-<span class="c1">#             &#39;interval&#39;: &#39;step&#39;, # The unit of the scheduler&#39;s step size</span>
-<span class="c1">#             &#39;frequency&#39;: 1, # The frequency of the scheduler</span>
-<span class="c1">#             &#39;reduce_on_plateau&#39;: False, # For ReduceLROnPlateau scheduler</span>
-<span class="c1">#         }</span>
-<span class="c1">#         return [opt], [sched]</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
