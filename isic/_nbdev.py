@@ -47,7 +47,11 @@ index = {"CutmixDict": "cb_cutmix.ipynb",
          "get_bias_batchnorm_params": "utils_model.ipynb",
          "print_grad_block": "utils_model.ipynb",
          "print_grad_module": "utils_model.ipynb",
-         "lr_find": "utils_model.ipynb"}
+         "lr_find": "utils_model.ipynb",
+         "SkinLabels": "dataset_dict.ipynb",
+         "preprocess_df": "dataset_dict.ipynb",
+         "SkinDataset": "dataset_dict.ipynb",
+         "SkinDataModule": "dataset_dict.ipynb"}
 
 modules = ["callback/cutmix.py",
            "callback/freeze.py",
@@ -58,7 +62,8 @@ modules = ["callback/cutmix.py",
            "layers.py",
            "model.py",
            "utils/core.py",
-           "utils/model.py"]
+           "utils/model.py",
+           "dataset.py"]
 
 doc_url = "https://termanteus.github.io/isic/"
 
