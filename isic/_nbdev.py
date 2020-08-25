@@ -58,6 +58,8 @@ modules = ["callback/cutmix.py",
            "layers.py",
            "model.py",
            "utils/core.py",
+           "utils/model.py",
+           "utils/model.py",
            "utils/model.py"]
 
 doc_url = "https://termanteus.github.io/isic/"

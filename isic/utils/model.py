@@ -217,9 +217,9 @@ def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, l
         ax.xaxis.set_minor_locator(locmin)
         ax.xaxis.set_minor_formatter(NullFormatter())
 
-        opt_lr = lrs.suggestion()
+        opt_lr = lr_finder.suggestion()
 
-        ax.plot(lrs[lrs._optimal_idx], losses[lrs._optimal_idx],
+        ax.plot(lrs[lr_finder._optimal_idx], losses[lr_finder._optimal_idx],
                 markersize=10, marker='o', color='red')
         ax.set_ylabel("Loss")
         ax.set_xlabel("Learning Rate")
