@@ -190,6 +190,7 @@ def print_grad_module(ms):
 # Cell
 def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, lr_find=True, verbose=False):
     args = {}
+    lr_finder=None
     if not cpu:
         args = {
             "gpus": 1,
@@ -211,3 +212,4 @@ def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, l
         print_grad_module(model.model[0])
         print('-' * 80)
         print_grad_module(model.model[1])
+    return lr_finder
