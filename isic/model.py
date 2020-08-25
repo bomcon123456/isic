@@ -44,6 +44,9 @@ class Model(LightningModule):
         for p in get_bias_batchnorm_params(self.model):
             p.force_train = True
 
+        n_groups = self.create_opt(lr)
+        freeze(self.model, n_groups)
+
         self.loss_func = LabelSmoothingCrossEntropy()
 
     def get_params(self):
