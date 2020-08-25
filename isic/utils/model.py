@@ -7,6 +7,10 @@ __all__ = ['set_require_grad', 'freeze_to', 'freeze', 'unfreeze', 'create_head',
 # Cell
 from functools import partial
 
+import matplotlib.pyplot as plt
+from matplotlib.ticker import LogLocator, NullFormatter
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -204,7 +208,23 @@ def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, l
                                     mode='exponential' if exp else 'linear', early_stop_threshold=1e10)
 
         # Inspect results
-        fig = lr_finder.plot(suggest=True)
+        lrs, losses = lr_finder.results['lr'], lr_finder.results['loss']
+        fig, ax = plt.subplots(1,1)
+        ax.plot(lrs, losses)
+        ax.set_xscale('log')
+        ax.xaxis.set_major_locator(LogLocator(base=10, numticks=12))
+        locmin = LogLocator(base=10.0,subs=np.arange(2, 10, 2)*.1,numticks=12)
+        ax.xaxis.set_minor_locator(locmin)
+        ax.xaxis.set_minor_formatter(NullFormatter())
+
+        opt_lr = lrs.suggestion()
+
+        ax.plot(lrs[lrs._optimal_idx], losses[lrs._optimal_idx],
+                markersize=10, marker='o', color='red')
+        ax.set_ylabel("Loss")
+        ax.set_xlabel("Learning Rate")
+        print(f'LR suggestion: {opt_lr:e}')
+
     else:
         trainer = pl.Trainer(max_epochs=1, fast_dev_run=True, **args)
         trainer.fit(model, dm)
