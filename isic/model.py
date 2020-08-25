@@ -45,7 +45,7 @@ class Model(LightningModule):
             p.force_train = True
 
         n_groups = self.create_opt(lr)
-        freeze(self.model, n_groups)
+        freeze(self, n_groups)
 
         self.loss_func = LabelSmoothingCrossEntropy()
 
