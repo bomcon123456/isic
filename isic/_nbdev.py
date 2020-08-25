@@ -46,7 +46,8 @@ index = {"CutmixDict": "cb_cutmix.ipynb",
          "norm_types": "utils_model.ipynb",
          "get_bias_batchnorm_params": "utils_model.ipynb",
          "print_grad_block": "utils_model.ipynb",
-         "print_grad_module": "utils_model.ipynb",
+         "check_attrib_module": "utils_model.ipynb",
+         "get_module_with_attrib": "utils_model.ipynb",
          "lr_find": "utils_model.ipynb"}
 
 modules = ["callback/cutmix.py",
@@ -58,8 +59,6 @@ modules = ["callback/cutmix.py",
            "layers.py",
            "model.py",
            "utils/core.py",
-           "utils/model.py",
-           "utils/model.py",
            "utils/model.py"]
 
 doc_url = "https://termanteus.github.io/isic/"

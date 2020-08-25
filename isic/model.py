@@ -24,7 +24,7 @@ from .callback.mixup import MixupDict
 from .callback.cutmix import CutmixDict
 from .callback.freeze import FreezeCallback, UnfreezeCallback
 from .utils.core import reduce_loss, generate_val_steps
-from .utils.model import apply_init, get_bias_batchnorm_params, apply_leaf, print_grad_module, create_body, create_head, lr_find, freeze, unfreeze
+from .utils.model import apply_init, get_bias_batchnorm_params, apply_leaf, check_attrib_module, create_body, create_head, lr_find, freeze, unfreeze
 
 # Cell
 class Model(LightningModule):
@@ -33,6 +33,7 @@ class Model(LightningModule):
         self.save_hyperparameters()
         # create body
         body, self.split, num_ftrs = create_body(arch)
+
         # create head
         head = create_head(num_ftrs, n_out)
 
@@ -41,16 +42,35 @@ class Model(LightningModule):
         apply_init(self.model[1])
 
         # Setup so that batchnorm will not be freeze
-        for p in get_bias_batchnorm_params(self.model):
+        for p in get_bias_batchnorm_params(self.model, False):
             p.force_train = True
+        for p in get_bias_batchnorm_params(self.model, True):
+            p.skip_wd = True
 
-        n_groups = self.create_opt(lr)
+        n_groups = self.create_opt(lr, skip_bn_wd=True)
         freeze(self, n_groups)
 
         self.loss_func = LabelSmoothingCrossEntropy()
 
-    def get_params(self):
-        return self.split(self.model)
+    def get_params(self, split_bn=True):
+        if split_bn:
+            non_bns = []
+            bns = []
+            splits = self.split(self.model)
+            for param_group in splits:
+                non_bn, bn = [], []
+                for param in param_group:
+                    if not param.requires_grad:
+                        continue
+                    elif getattr(param, 'skip_wd', False):
+                        bn.append(param)
+                    else:
+                        non_bn.append(param)
+                non_bns.append(non_bn)
+                bns.append(bn)
+            return non_bns + bns
+        else:
+            return self.split(self.model)
 
     def forward(self, x):
         return self.model(x)
@@ -75,26 +95,33 @@ class Model(LightningModule):
         result.log('val_acc', acc, prog_bar=True)
         return result
 
-    def create_opt(self, lr=None):
+    def create_opt(self, lr=None, skip_bn_wd=True):
         if lr is None:
             lr = self.hparams.lr
-        param_groups = self.get_params()
-        n_groups = len(param_groups)
+        param_groups = self.get_params(skip_bn_wd)
+
+        n_groups = real_n_groups = len(param_groups)
+        if skip_bn_wd:
+            # There are duplicates since we split the batchnorms out of it.
+            n_groups //= 2
 
         def _inner():
             print('override_called')
 
             lrs = generate_val_steps(lr, n_groups)
-            assert len(lrs) == n_groups, f"Trying to set {len(lrs)} values for LR but there are {n_groups} parameter groups."
+            if skip_bn_wd:
+                lrs += lrs
+            assert len(lrs) == real_n_groups, f"Trying to set {len(lrs)} values for LR but there are {n_groups} parameter groups."
             grps = []
-            for i in range(n_groups):
+            for i, (pg, l) in enumerate(zip(param_groups, lrs)):
                 grps.append({
-                    "params": param_groups[i],
-                    "lr": lrs[i]
+                    "params": pg,
+                    "lr": l,
+                    "weight_decay": self.hparams.wd if i < n_groups else 0.
                 })
             print(lrs)
             opt = torch.optim.Adam(grps,
-                        lr=1e-2, weight_decay=self.hparams.wd
+                        lr=lr, weight_decay=self.hparams.wd
             )
             scheduler = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lrs, steps_per_epoch=self.hparams.steps_epoch, epochs=self.hparams.epochs)
             sched = {

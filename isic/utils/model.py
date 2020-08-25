@@ -2,7 +2,7 @@
 
 __all__ = ['set_require_grad', 'freeze_to', 'freeze', 'unfreeze', 'create_head', 'params', 'has_pool_type',
            'create_body', 'requires_grad', 'init_default', 'cond_init', 'apply_leaf', 'apply_init', 'norm_types',
-           'get_bias_batchnorm_params', 'print_grad_block', 'print_grad_module', 'lr_find']
+           'get_bias_batchnorm_params', 'print_grad_block', 'check_attrib_module', 'get_module_with_attrib', 'lr_find']
 
 # Cell
 from functools import partial
@@ -35,11 +35,11 @@ def freeze_to(n, model, n_groups):
     if frozen_idx >= n_groups:
         #TODO use warnings.warn
         print(f"Freezing {frozen_idx} groups; model has {n_groups}; whole model is frozen.")
-    for ps in model.get_params()[n:]:
+    for ps in model.get_params(split_bn=False)[n:]:
         for p in ps:
             # require_grad -> True
             set_require_grad(p, True)
-    for ps in model.get_params()[:n]:
+    for ps in model.get_params(split_bn=False)[:n]:
         for p in ps:
             # require_grad -> False
             set_require_grad(p, False)
@@ -92,23 +92,25 @@ def create_body(arch):
         return [params(m[0][0][:6]), params(m[0][0][6:]), params(m[1:])]
 
     model = getattr(models, arch)(pretrained=True)
-    num_ftrs = model.fc.in_features
+
     if 'xresnet' in arch:
         cut = -4
         split = _xresnet_split
-    elif 'resnet':
+    elif 'resnet' in arch:
         cut = -2
         split = _resnet_split
-    elif 'squeeze':
+        num_ftrs = model.fc.in_features
+    elif 'squeeze' in arch:
         cut = -1
         split = _squeezenet_split
-    elif 'dense':
+    elif 'dense' in arch:
         cut = -1
         split = _densenet_split
-    elif 'vgg':
+    elif 'vgg' in arch:
         cut = -2
         split = _vgg_split
-    elif 'alex':
+        num_ftrs = 512
+    elif 'alex' in arch:
         cut = -2
         split = _alexnet_split
     else:
@@ -156,7 +158,7 @@ def get_bias_batchnorm_params(m, with_bias=True):
         return list(m.parameters())
     res = []
     for c in m.children():
-        r = get_bias_batchnorm_params(c)
+        r = get_bias_batchnorm_params(c, with_bias)
         res += r
     if with_bias and getattr(m, 'bias', None) is not None:
         res.append(m.bias)
@@ -176,20 +178,25 @@ def print_grad_block(ms):
         print(r)
 
 
-def print_grad_module(ms):
+def check_attrib_module(ms, attrib='requires_grad'):
     """
         This version only print the smallest module
     """
     for m in ms.children():
         if len(list(m.children()))>0:
-            print_grad_module(m)
+            check_attrib_module(m, attrib)
             continue
         print(m)
         r = []
         for p in m.parameters():
-            if hasattr(p, 'requires_grad'):
-                r.append(p.requires_grad)
+            if hasattr(p, attrib):
+                r.append(getattr(p, attrib))
         print(r)
+
+def get_module_with_attrib(model, attrib='requires_grad'):
+    for n, p in model.named_parameters():
+        if getattr(p, attrib, False):
+            print(n)
 
 # Cell
 def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, lr_find=True, verbose=False):
@@ -229,7 +236,13 @@ def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, l
         trainer = pl.Trainer(max_epochs=1, fast_dev_run=True, **args)
         trainer.fit(model, dm)
     if verbose:
-        print_grad_module(model.model[0])
+        print(('*'*30)+'Check requires_grad' + ('*'*30))
+        check_attrib_module(model.model[0])
         print('-' * 80)
-        print_grad_module(model.model[1])
+        check_attrib_module(model.model[1])
+        print(('*'*30)+'Check skip_wd' + ('*'*30))
+        check_attrib_module(model.model[0], 'skip_wd')
+        print('-' * 80)
+        check_attrib_module(model.model[1], 'skip_wd')
+
     return lr_finder
