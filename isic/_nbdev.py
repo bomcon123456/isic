@@ -12,6 +12,10 @@ index = {"CutmixDict": "cb_cutmix.ipynb",
          "AppConfig": "config.ipynb",
          "PathConfig": "config.ipynb",
          "TrainConfig": "config.ipynb",
+         "SkinLabels": "dataset_dict.ipynb",
+         "preprocess_df": "dataset_dict.ipynb",
+         "SkinDataset": "dataset_dict.ipynb",
+         "SkinDataModule": "dataset_dict.ipynb",
          "Hook": "hook.ipynb",
          "Hooks": "hook.ipynb",
          "hook_output": "hook.ipynb",
@@ -69,11 +73,7 @@ index = {"CutmixDict": "cb_cutmix.ipynb",
          "children_and_parameters": "utils_model.ipynb",
          "flatten_model": "utils_model.ipynb",
          "in_channels": "utils_model.ipynb",
-         "one_param": "utils_model.ipynb",
-         "SkinLabels": "dataset_dict.ipynb",
-         "preprocess_df": "dataset_dict.ipynb",
-         "SkinDataset": "dataset_dict.ipynb",
-         "SkinDataModule": "dataset_dict.ipynb"}
+         "one_param": "utils_model.ipynb"}
 
 modules = ["callback/cutmix.py",
            "callback/freeze.py",
@@ -81,13 +81,13 @@ modules = ["callback/cutmix.py",
            "callback/logtable.py",
            "callback/mixup.py",
            "config.py",
+           "dataset.py",
            "hook.py",
            "layers.py",
            "model.py",
            "sampler.py",
            "utils/core.py",
-           "utils/model.py",
-           "dataset.py"]
+           "utils/model.py"]
 
 doc_url = "https://termanteus.github.io/isic/"
 

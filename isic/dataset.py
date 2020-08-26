@@ -170,9 +170,12 @@ class SkinDataModule(pl.LightningDataModule):
             pass
 
     def train_dataloader(self):
+        def _get_label(dataset, idx):
+            return int(dataset.df['label_index'][idx])
+
         return DataLoader(self.train_ds, batch_size=self.bs,
-                          sampler=ImbalancedDatasetSampler(self.train_ds, callback_get_label=lambda ds, i: ds[i]['label']),
-                          shuffle=True, num_workers=4)
+                          sampler=ImbalancedDatasetSampler(self.train_ds, callback_get_label=_get_label),
+                          num_workers=4)
 
     def val_dataloader(self):
         return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4)
