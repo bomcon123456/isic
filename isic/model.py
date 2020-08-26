@@ -121,7 +121,7 @@ class Model(LightningModule):
                 })
             print(lrs)
             opt = torch.optim.Adam(grps,
-                        lr=lr, weight_decay=self.hparams.wd
+                        lr=self.hparams.lr
             )
             scheduler = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lrs, steps_per_epoch=self.hparams.steps_epoch, epochs=self.hparams.epochs)
             sched = {

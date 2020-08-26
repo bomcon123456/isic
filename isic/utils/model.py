@@ -236,6 +236,7 @@ def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, l
         trainer = pl.Trainer(max_epochs=1, fast_dev_run=True, **args)
         trainer.fit(model, dm)
     if verbose:
+        print(trainer.optimizers[0])
         print(('*'*30)+'Check requires_grad' + ('*'*30))
         check_attrib_module(model.model[0])
         print('-' * 80)
