@@ -2,7 +2,7 @@
 
 __all__ = ['listify', 'is_listy', 'camel2snake', 'snakify_class_name', 'get_default_device', 'unsqueeze', 'reduce_loss',
            'NoneReduce', 'even_mults', 'generate_val_steps', 'format_time', 'first', 'apply', 'to_detach',
-           'PrettyString']
+           'PrettyString', 'set_if_none']
 
 # Cell
 import numpy as np
@@ -133,3 +133,6 @@ def to_detach(b, cpu=True):
 class PrettyString(str):
     "Little hack to get strings to show properly in Jupyter."
     def __repr__(self): return self
+
+# Cell
+def set_if_none(obj, attrib, val):

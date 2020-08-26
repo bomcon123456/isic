@@ -101,17 +101,11 @@ class Model(LightningModule):
             lr = self.hparams.lr
         if (epochs is None and self.epochs is None) or (steps_epoch is None and self.steps_epoch is None):
             raise Exception("You should pass epochs/steps_epoch at least one time in create_opt.")
-        if epochs is None:
-            epochs = self.epochs
-        else:
-            self.epochs = epochs
-        if step_epoch is None:
-            step_epoch = self.step_epoch
-        else:
-            self.step_epoch = step_epoch
+
+        epochs = self.epochs if epochs is None else epochs
+        steps_epoch = self.steps_epoch if steps_epoch is None else steps_epoch
 
         param_groups = self.get_params(skip_bn_wd)
-
         n_groups = real_n_groups = len(param_groups)
         if skip_bn_wd:
             # There are duplicates since we split the batchnorms out of it.
