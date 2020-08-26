@@ -96,7 +96,7 @@ nb_path: "nbs\model.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Model" class="doc_header"><code>class</code> <code>Model</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Model</code>(<strong><code>steps_epoch</code></strong>, <strong><code>epochs</code></strong>=<em><code>30</code></em>, <strong><code>lr</code></strong>=<em><code>0.01</code></em>, <strong><code>wd</code></strong>=<em><code>0.0</code></em>, <strong><code>n_out</code></strong>=<em><code>7</code></em>, <strong><code>concat_pool</code></strong>=<em><code>True</code></em>, <strong><code>arch</code></strong>=<em><code>'resnet50'</code></em>) :: <code>LightningModule</code></p>
+<h2 id="Model" class="doc_header"><code>class</code> <code>Model</code><a href="https://github.com/termanteus/isic/tree/master/isic/model.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Model</code>(<strong><code>lr</code></strong>=<em><code>0.01</code></em>, <strong><code>wd</code></strong>=<em><code>0.0</code></em>, <strong><code>n_out</code></strong>=<em><code>7</code></em>, <strong><code>concat_pool</code></strong>=<em><code>True</code></em>, <strong><code>arch</code></strong>=<em><code>'resnet50'</code></em>) :: <code>LightningModule</code></p>
 </blockquote>
 <p>Helper class that provides a standard way to create an ABC using
 inheritance.</p>
@@ -157,6 +157,7 @@ inheritance.</p>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">EPOCHS</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">STEPS_EPOCH</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="mf">1e-2</span>
 </pre></div>
 
     </div>
@@ -173,27 +174,28 @@ inheritance.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">steps_epoch</span><span class="o">=</span><span class="n">STEPS_EPOCH</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="s1">&#39;vgg16&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="s1">&#39;resnet18&#39;</span><span class="p">)</span>
+
+<span class="c1"># # Freeze model</span>
+<span class="c1"># n_groups = model.create_opt(steps_epoch=STEPS_EPOCH, epochs=EPOCHS, lr=lr, skip_bn_wd=True)</span>
+<span class="c1"># freeze(model, n_groups)</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>torch.Size([1, 512, 2, 2])
+</pre>
 </div>
-    {% endraw %}
+</div>
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unfreeze</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
@@ -223,10 +225,12 @@ inheritance.</p>
 <pre>Running in fast_dev_run mode: will run a full train, val and test loop using a single batch
 GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
+C:\Users\bomco\miniconda3\envs\devtorch\lib\site-packages\pytorch_lightning\utilities\distributed.py:37: UserWarning: Could not log computational graph since the `model.example_input_array` attribute is not set or `input_array` was not given
+  warnings.warn(*args, **kwargs)
 
   | Name      | Type                       | Params
 ---------------------------------------------------------
-0 | model     | Sequential                 | 15 M  
+0 | model     | Sequential                 | 11 M  
 1 | loss_func | LabelSmoothingCrossEntropy | 0     
 </pre>
 </div>
@@ -253,69 +257,180 @@ TPU available: False, using: 0 TPU cores
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
+Adam (
+Parameter Group 0
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.0004
+    lr: 0.0052
+    max_lr: 0.01
+    max_momentum: 0.95
+    min_lr: 4e-08
+    weight_decay: 0.0
+
+Parameter Group 1
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.0004
+    lr: 0.0052
+    max_lr: 0.01
+    max_momentum: 0.95
+    min_lr: 4e-08
+    weight_decay: 0.0
+
+Parameter Group 2
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.0004
+    lr: 0.0052
+    max_lr: 0.01
+    max_momentum: 0.95
+    min_lr: 4e-08
+    weight_decay: 0.0
+
+Parameter Group 3
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.0004
+    lr: 0.0052
+    max_lr: 0.01
+    max_momentum: 0.95
+    min_lr: 4e-08
+    weight_decay: 0.0
+
+Parameter Group 4
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.0004
+    lr: 0.0052
+    max_lr: 0.01
+    max_momentum: 0.95
+    min_lr: 4e-08
+    weight_decay: 0.0
+
+Parameter Group 5
+    amsgrad: False
+    base_momentum: 0.85
+    betas: (0.8999999999999999, 0.999)
+    eps: 1e-08
+    initial_lr: 0.0004
+    lr: 0.0052
+    max_lr: 0.01
+    max_momentum: 0.95
+    min_lr: 4e-08
+    weight_decay: 0.0
+)
 ******************************Check requires_grad******************************
-Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+[]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-[]
-Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-[]
-Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-[]
-Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
-ReLU(inplace=True)
-[]
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-[]
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
-ReLU(inplace=True)
-[]
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
-ReLU(inplace=True)
-[]
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[False, False]
-ReLU(inplace=True)
-[]
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-[]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[&#39;weight-False&#39;]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 --------------------------------------------------------------------------------
 AdaptiveAvgPool2d(output_size=1)
 []
@@ -324,82 +439,120 @@ AdaptiveMaxPool2d(output_size=1)
 Flatten()
 []
 BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-[True, True]
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 Dropout(p=0.25, inplace=False)
 []
 Linear(in_features=1024, out_features=512, bias=False)
-[True]
+[&#39;weight-True&#39;]
 ReLU(inplace=True)
 []
 BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-[True, True]
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 Dropout(p=0.5, inplace=False)
 []
 Linear(in_features=512, out_features=7, bias=False)
-[True]
+[&#39;weight-True&#39;]
 ******************************Check skip_wd******************************
-Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+[]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+[]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
 []
-Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
 []
-Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
 []
-Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+[]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+[]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 ReLU(inplace=True)
 []
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
-ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
 []
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-[]
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
-ReLU(inplace=True)
-[]
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
-ReLU(inplace=True)
-[]
-Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-[True]
-ReLU(inplace=True)
-[]
-MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-[]
+BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 --------------------------------------------------------------------------------
 AdaptiveAvgPool2d(output_size=1)
 []
@@ -408,7 +561,7 @@ AdaptiveMaxPool2d(output_size=1)
 Flatten()
 []
 BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-[True, True]
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 Dropout(p=0.25, inplace=False)
 []
 Linear(in_features=1024, out_features=512, bias=False)
@@ -416,7 +569,7 @@ Linear(in_features=1024, out_features=512, bias=False)
 ReLU(inplace=True)
 []
 BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-[True, True]
+[&#39;weight-True&#39;, &#39;bias-True&#39;]
 Dropout(p=0.5, inplace=False)
 []
 Linear(in_features=512, out_features=7, bias=False)
@@ -438,9 +591,7 @@ Linear(in_features=512, out_features=7, bias=False)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
-
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">HyperparamsLogger</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -546,62 +697,10 @@ Saving latest checkpoint..
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">optimizers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unfreeze</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Adam (
-Parameter Group 0
-    amsgrad: False
-    base_momentum: 0.85
-    betas: (0.8999999999999999, 0.999)
-    eps: 1e-08
-    initial_lr: 4e-05
-    lr: 0.0005200000000000001
-    max_lr: 0.001
-    max_momentum: 0.95
-    min_lr: 4e-09
-    weight_decay: 0.0
-
-Parameter Group 1
-    amsgrad: False
-    base_momentum: 0.85
-    betas: (0.8999999999999999, 0.999)
-    eps: 1e-08
-    initial_lr: 0.0012649110640673518
-    lr: 0.016443843832875574
-    max_lr: 0.03162277660168379
-    max_momentum: 0.95
-    min_lr: 1.2649110640673517e-07
-    weight_decay: 0.0
-
-Parameter Group 2
-    amsgrad: False
-    base_momentum: 0.85
-    betas: (0.8999999999999999, 0.999)
-    eps: 1e-08
-    initial_lr: 0.04
-    lr: 0.52
-    max_lr: 1.0
-    max_momentum: 0.95
-    min_lr: 4e-06
-    weight_decay: 0.0
-)</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -615,11 +714,8 @@ Parameter Group 2
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">hp_log</span> <span class="o">=</span> <span class="n">HyperparamsLogger</span><span class="p">()</span>
-<span class="n">freeze_cb</span> <span class="o">=</span> <span class="n">FreezeCallback</span><span class="p">()</span>
-
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">hp_log</span><span class="p">,</span> <span class="n">unfreeze_cb</span><span class="p">],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">create_opt</span><span class="p">(</span><span class="mf">1e-10</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">max_epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">LogTableMetricsCallback</span><span class="p">(),</span> <span class="n">HyperparamsLogger</span><span class="p">()],</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">limit_val_batches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit_train_batches</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_opt</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mf">5e-7</span><span class="p">,</span> <span class="mf">3e-4</span><span class="p">))</span>
 </pre></div>
 
     </div>

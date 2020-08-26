@@ -74,8 +74,9 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="listify" class="doc_header"><code>listify</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L18" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>listify</code>(<strong><code>o</code></strong>)</p>
+<h4 id="listify" class="doc_header"><code>listify</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L19" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>listify</code>(<strong><code>o</code></strong>)</p>
 </blockquote>
+<p>Listify object, wrap that object with a list if need.</p>
 
 </div>
 
@@ -105,7 +106,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="is_listy" class="doc_header"><code>is_listy</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L26" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_listy</code>(<strong><code>x</code></strong>)</p>
+<h4 id="is_listy" class="doc_header"><code>is_listy</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L28" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>is_listy</code>(<strong><code>x</code></strong>)</p>
 </blockquote>
 <p><code>isinstance(x, (tuple,list,L))</code></p>
 
@@ -137,8 +138,9 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="camel2snake" class="doc_header"><code>camel2snake</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L35" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>camel2snake</code>(<strong><code>name</code></strong>)</p>
+<h4 id="camel2snake" class="doc_header"><code>camel2snake</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L37" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>camel2snake</code>(<strong><code>name</code></strong>)</p>
 </blockquote>
+<p>CamelChar to camel_char</p>
 
 </div>
 
@@ -168,8 +170,9 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="snakify_class_name" class="doc_header"><code>snakify_class_name</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L40" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snakify_class_name</code>(<strong><code>obj</code></strong>, <strong><code>cls_name</code></strong>)</p>
+<h4 id="snakify_class_name" class="doc_header"><code>snakify_class_name</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>snakify_class_name</code>(<strong><code>obj</code></strong>, <strong><code>cls_name</code></strong>)</p>
 </blockquote>
+<p>Get class name then snakify it</p>
 
 </div>
 
@@ -199,7 +202,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_default_device" class="doc_header"><code>get_default_device</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L44" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_default_device</code>(<strong><code>use_cuda</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="get_default_device" class="doc_header"><code>get_default_device</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L48" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_default_device</code>(<strong><code>use_cuda</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Return or set default device; <code>use_cuda</code>: None - CUDA if available; True - error if not availabe; False - CPU</p>
 
@@ -231,7 +234,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="unsqueeze" class="doc_header"><code>unsqueeze</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L51" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unsqueeze</code>(<strong><code>x</code></strong>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n</code></strong>=<em><code>1</code></em>)</p>
+<h4 id="unsqueeze" class="doc_header"><code>unsqueeze</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unsqueeze</code>(<strong><code>x</code></strong>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n</code></strong>=<em><code>1</code></em>)</p>
 </blockquote>
 <p>Same as <code>torch.unsqueeze</code> but can add <code>n</code> dims</p>
 
@@ -263,8 +266,9 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="reduce_loss" class="doc_header"><code>reduce_loss</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L57" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>reduce_loss</code>(<strong><code>loss</code></strong>, <strong><code>reduction</code></strong>=<em><code>'mean'</code></em>)</p>
+<h4 id="reduce_loss" class="doc_header"><code>reduce_loss</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L61" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>reduce_loss</code>(<strong><code>loss</code></strong>, <strong><code>reduction</code></strong>=<em><code>'mean'</code></em>)</p>
 </blockquote>
+<p>Manipulate loss with option <code>reduction</code> type.</p>
 
 </div>
 
@@ -294,7 +298,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NoneReduce" class="doc_header"><code>class</code> <code>NoneReduce</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L61" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NoneReduce</code>(<strong><code>loss_func</code></strong>)</p>
+<h2 id="NoneReduce" class="doc_header"><code>class</code> <code>NoneReduce</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L66" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NoneReduce</code>(<strong><code>loss_func</code></strong>)</p>
 </blockquote>
 <p>A context manager to evaluate <code>loss_func</code> with none reduce.</p>
 
@@ -326,7 +330,7 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="even_mults" class="doc_header"><code>even_mults</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L77" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>even_mults</code>(<strong><code>start</code></strong>, <strong><code>stop</code></strong>, <strong><code>n</code></strong>)</p>
+<h4 id="even_mults" class="doc_header"><code>even_mults</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L81" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>even_mults</code>(<strong><code>start</code></strong>, <strong><code>stop</code></strong>, <strong><code>n</code></strong>)</p>
 </blockquote>
 <p>Build log-stepped array from <code>start</code> to <code>stop</code> in <code>n</code> steps.</p>
 
@@ -358,8 +362,9 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generate_val_steps" class="doc_header"><code>generate_val_steps</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L85" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_val_steps</code>(<strong><code>val</code></strong>, <strong><code>n</code></strong>)</p>
+<h4 id="generate_val_steps" class="doc_header"><code>generate_val_steps</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L89" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate_val_steps</code>(<strong><code>val</code></strong>, <strong><code>n</code></strong>)</p>
 </blockquote>
+<p>Generate <code>n</code> value, if n is slice, will generate a log-stepped array depends on <code>val</code></p>
 
 </div>
 
@@ -389,9 +394,137 @@ nb_path: "nbs\utils.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="format_time" class="doc_header"><code>format_time</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_time</code>(<strong><code>t</code></strong>)</p>
+<h4 id="format_time" class="doc_header"><code>format_time</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L102" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_time</code>(<strong><code>t</code></strong>)</p>
 </blockquote>
 <p>Format <code>t</code> (in seconds) to (h):mm:ss</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="first" class="doc_header"><code>first</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L110" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>first</code>(<strong><code>x</code></strong>)</p>
+</blockquote>
+<p>First element of <code>x</code>, or None if missing</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="apply" class="doc_header"><code>apply</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L116" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>apply</code>(<strong><code>func</code></strong>, <strong><code>x</code></strong>, <strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>)</p>
+</blockquote>
+<p>Apply <code>func</code> recursively to <code>x</code>, passing on args</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="to_detach" class="doc_header"><code>to_detach</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L124" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>to_detach</code>(<strong><code>b</code></strong>, <strong><code>cpu</code></strong>=<em><code>True</code></em>)</p>
+</blockquote>
+<p>Recursively detach lists of tensors in <code>b</code>; put them on the CPU if <code>cpu=True</code>.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="PrettyString" class="doc_header"><code>class</code> <code>PrettyString</code><a href="https://github.com/termanteus/isic/tree/master/isic/utils/core.py#L133" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PrettyString</code>() :: <code>str</code></p>
+</blockquote>
+<p>Little hack to get strings to show properly in Jupyter.</p>
 
 </div>
 

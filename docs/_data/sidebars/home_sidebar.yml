@@ -28,6 +28,9 @@ entries:
       title: Config
       url: /config
     - output: web,pdf
+      title: Hook
+      url: /hook
+    - output: web,pdf
       title: Layers
       url: /layers
     - output: web,pdf

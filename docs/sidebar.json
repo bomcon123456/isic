@@ -7,6 +7,7 @@
     "LogTableMetricsCallback": "/cb_logtable",
     "Mixup Callback": "/cb_mixup",
     "Config": "/config",
+    "Hook": "/hook",
     "Layers": "/layers",
     "Models": "/model",
     "Data Sampler": "/sampler",

@@ -96,9 +96,20 @@ class Model(LightningModule):
         result.log('val_acc', acc, prog_bar=True)
         return result
 
-    def create_opt(self, steps_epoch, lr=None, skip_bn_wd=True, epochs=30):
+    def create_opt(self, lr=None, skip_bn_wd=True, epochs=None, steps_epoch=None):
         if lr is None:
             lr = self.hparams.lr
+        if (epochs is None and self.epochs is None) or (steps_epoch is None and self.steps_epoch is None):
+            raise Exception("You should pass epochs/steps_epoch at least one time in create_opt.")
+        if epochs is None:
+            epochs = self.epochs
+        else:
+            self.epochs = epochs
+        if step_epoch is None:
+            step_epoch = self.step_epoch
+        else:
+            self.step_epoch = step_epoch
+
         param_groups = self.get_params(skip_bn_wd)
 
         n_groups = real_n_groups = len(param_groups)
