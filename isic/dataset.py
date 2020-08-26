@@ -8,18 +8,21 @@ import copy
 import torch
 from torch.utils.data import DataLoader, Dataset
 import torchvision.transforms as transforms
+
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import pytorch_lightning as pl
+import matplotlib.pyplot as plt
 
+
+import pytorch_lightning as pl
 from tqdm import tqdm
 
 import cv2
-import numpy as np
 from PIL import Image
-import matplotlib.pyplot as plt
 
 from .config import *
+from .sampler import ImbalancedDatasetSampler
 
 # Cell
 class SkinLabels():
