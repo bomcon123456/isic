@@ -4,6 +4,7 @@ __all__ = ['ImbalancedDatasetSampler']
 
 # Cell
 import torch
+import torchvision
 
 # Cell
 class ImbalancedDatasetSampler(torch.utils.data.sampler.Sampler):
