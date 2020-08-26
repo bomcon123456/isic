@@ -28,7 +28,7 @@ from .utils.model import apply_init, get_bias_batchnorm_params, apply_leaf, chec
 
 # Cell
 class Model(LightningModule):
-    def __init__(self, steps_epoch, epochs=30, lr=1e-2, wd=0., n_out=7, concat_pool=True, arch='resnet50'):
+    def __init__(self, lr=1e-2, wd=0., n_out=7, concat_pool=True, arch='resnet50'):
         super().__init__()
         self.save_hyperparameters()
         # create body
@@ -41,34 +41,35 @@ class Model(LightningModule):
         self.model = nn.Sequential(body, head)
         apply_init(self.model[1])
 
-        # Setup so that batchnorm will not be freeze
+        # Setup so that batchnorm will not be freeze.
         for p in get_bias_batchnorm_params(self.model, False):
             p.force_train = True
+        # Setup so that biases and batchnorm will skip weight decay.
         for p in get_bias_batchnorm_params(self.model, True):
             p.skip_wd = True
 
-        n_groups = self.create_opt(lr, skip_bn_wd=True)
-        freeze(self, n_groups)
-
         self.loss_func = LabelSmoothingCrossEntropy()
+
+    def exclude_params_with_attrib(self, splits, skip_list=['skip_wd']):
+        includes = []
+        excludes = []
+        for param_group in splits:
+            ins, exs = [], []
+            for param in param_group:
+                if not param.requires_grad:
+                    continue
+                elif any(getattr(param, attrib, False) for attrib in skip_list):
+                    exs.append(param)
+                else:
+                    ins.append(param)
+            includes.append(ins)
+            excludes.append(exs)
+        return includes + excludes
 
     def get_params(self, split_bn=True):
         if split_bn:
-            non_bns = []
-            bns = []
             splits = self.split(self.model)
-            for param_group in splits:
-                non_bn, bn = [], []
-                for param in param_group:
-                    if not param.requires_grad:
-                        continue
-                    elif getattr(param, 'skip_wd', False):
-                        bn.append(param)
-                    else:
-                        non_bn.append(param)
-                non_bns.append(non_bn)
-                bns.append(bn)
-            return non_bns + bns
+            return self.exclude_params_with_attrib(splits)
         else:
             return self.split(self.model)
 
@@ -95,7 +96,7 @@ class Model(LightningModule):
         result.log('val_acc', acc, prog_bar=True)
         return result
 
-    def create_opt(self, lr=None, skip_bn_wd=True):
+    def create_opt(self, steps_epoch, lr=None, skip_bn_wd=True, epochs=30):
         if lr is None:
             lr = self.hparams.lr
         param_groups = self.get_params(skip_bn_wd)
@@ -112,6 +113,7 @@ class Model(LightningModule):
             if skip_bn_wd:
                 lrs += lrs
             assert len(lrs) == real_n_groups, f"Trying to set {len(lrs)} values for LR but there are {n_groups} parameter groups."
+
             grps = []
             for i, (pg, l) in enumerate(zip(param_groups, lrs)):
                 grps.append({
@@ -119,11 +121,12 @@ class Model(LightningModule):
                     "lr": l,
                     "weight_decay": self.hparams.wd if i < n_groups else 0.
                 })
+
             print(lrs)
             opt = torch.optim.Adam(grps,
                         lr=self.hparams.lr
             )
-            scheduler = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lrs, steps_per_epoch=self.hparams.steps_epoch, epochs=self.hparams.epochs)
+            scheduler = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lrs, steps_per_epoch=steps_epoch, epochs=epochs)
             sched = {
                 'scheduler': scheduler, # The LR schduler
                 'interval': 'step', # The unit of the scheduler's step size

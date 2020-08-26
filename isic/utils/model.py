@@ -92,6 +92,8 @@ def create_body(arch):
         return [params(m[0][0][:6]), params(m[0][0][6:]), params(m[1:])]
 
     model = getattr(models, arch)(pretrained=True)
+    # TODO: Handle if used models using 1 channel
+    ch_in, size = 3, (64, 64)
 
     if 'xresnet' in arch:
         cut = -4
@@ -188,9 +190,9 @@ def check_attrib_module(ms, attrib='requires_grad'):
             continue
         print(m)
         r = []
-        for p in m.parameters():
+        for name, p in m.named_parameters():
             if hasattr(p, attrib):
-                r.append(getattr(p, attrib))
+                r.append(name + '-' + str(getattr(p, attrib)))
         print(r)
 
 def get_module_with_attrib(model, attrib='requires_grad'):
