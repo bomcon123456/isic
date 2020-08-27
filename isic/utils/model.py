@@ -191,7 +191,7 @@ def print_grad_block(ms):
         print(r)
 
 
-def check_attrib_module(ms, attrib='requires_grad'):
+def check_attrib_module(ms, attribs=['requires_grad', 'skip_wd']):
     """
         This version only print the smallest module
     """
@@ -202,8 +202,9 @@ def check_attrib_module(ms, attrib='requires_grad'):
         print(m)
         r = []
         for name, p in m.named_parameters():
-            if hasattr(p, attrib):
-                r.append(name + '-' + str(getattr(p, attrib)))
+            for attr in attribs:
+                if hasattr(p, attr):
+                    r.append(name + '-' + attr + '-'+ str(getattr(p, attr)))
         print(r)
 
 def get_module_with_attrib(model, attrib='requires_grad'):
@@ -212,7 +213,7 @@ def get_module_with_attrib(model, attrib='requires_grad'):
             print(n)
 
 # Cell
-def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, lr_find=True, verbose=False):
+def lr_find(model, dm, min_lr=1e-7, max_lr=10, n_train=100, exp=True, cpu=True, lr_find=True, verbose=False):
     args = {}
     lr_finder=None
     if not cpu:
@@ -250,14 +251,10 @@ def lr_find(model, dm, min_lr=1e-8, max_lr=1, n_train=100, exp=True, cpu=True, l
         trainer.fit(model, dm)
     if verbose:
         print(trainer.optimizers[0])
-        print(('*'*30)+'Check requires_grad' + ('*'*30))
+        print(('*'*30)+'Check requires_grad/ skip_wd' + ('*'*30))
         check_attrib_module(model.model[0])
         print('-' * 80)
         check_attrib_module(model.model[1])
-        print(('*'*30)+'Check skip_wd' + ('*'*30))
-        check_attrib_module(model.model[0], 'skip_wd')
-        print('-' * 80)
-        check_attrib_module(model.model[1], 'skip_wd')
 
     return lr_finder
 

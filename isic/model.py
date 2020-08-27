@@ -164,6 +164,6 @@ def fit_one_cycle(epochs, model, datamodule, opt='Adam', max_lr=None, pct_start=
                     div_factor=div_factor, final_div_factor=final_div_factor,
                     base_momentum=base_momentum, max_momentum=max_momentum)
     model.create_opt(opt_func, sched, lr=max_lr, wd=wd)
-    trainer = pl.Trainer(max_epochs=epochs, callbacks=cbs, **kwargs)
+    trainer = pl.Trainer(max_epochs=epochs, **kwargs)
     trainer.fit(model, datamodule)
     return trainer
