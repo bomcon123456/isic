@@ -133,7 +133,7 @@ class Model(LightningModule):
 
             opt = opt_func(grps, lr=self.hparams.lr if isinstance(lr, slice) else lr)
             if sched_func is not None:
-                scheduler = sched(opt)
+                scheduler = sched_func(opt)
                 sched = {
                     'scheduler': scheduler, # The LR schduler
                     'interval': 'step', # The unit of the scheduler's step size
