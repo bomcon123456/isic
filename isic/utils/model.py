@@ -197,7 +197,7 @@ def check_attrib_module(ms, attribs=['requires_grad', 'skip_wd']):
     """
     for m in ms.children():
         if len(list(m.children()))>0:
-            check_attrib_module(m, attrib)
+            check_attrib_module(m, attribs)
             continue
         print(m)
         r = []
