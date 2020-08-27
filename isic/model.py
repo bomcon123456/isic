@@ -133,7 +133,7 @@ class Model(LightningModule):
 
             opt = opt_func(grps, lr=self.hparams.lr if isinstance(lr, slice) else lr)
             if sched_func is not None:
-                scheduler = sched_func(opt)
+                scheduler = sched_func(opt, max_lr=lrs)
                 sched = {
                     'scheduler': scheduler, # The LR schduler
                     'interval': 'step', # The unit of the scheduler's step size
@@ -159,8 +159,7 @@ def fit_one_cycle(epochs, model, datamodule, opt='Adam', max_lr=None, pct_start=
         opt_func = opt
     sched_func = torch.optim.lr_scheduler.OneCycleLR
     steps_epoch = len(datamodule.train_dataloader())
-    sched = partial(sched_func, epochs=epochs, steps_per_epoch=steps_epoch,
-                    max_lr=max_lr, pct_start=pct_start,
+    sched = partial(sched_func, epochs=epochs, steps_per_epoch=steps_epoch, pct_start=pct_start,
                     div_factor=div_factor, final_div_factor=final_div_factor,
                     base_momentum=base_momentum, max_momentum=max_momentum)
     model.create_opt(opt_func, sched, lr=max_lr, wd=wd)

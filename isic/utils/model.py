@@ -213,7 +213,7 @@ def get_module_with_attrib(model, attrib='requires_grad'):
             print(n)
 
 # Cell
-def lr_find(model, dm, min_lr=1e-7, max_lr=10, n_train=100, exp=True, cpu=True, lr_find=True, verbose=False):
+def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100, exp=True, cpu=True, lr_find=True, skip_last=5, verbose=False):
     args = {}
     lr_finder=None
     if not cpu:
@@ -229,7 +229,7 @@ def lr_find(model, dm, min_lr=1e-7, max_lr=10, n_train=100, exp=True, cpu=True, 
                                     mode='exponential' if exp else 'linear', early_stop_threshold=1e10)
 
         # Inspect results
-        lrs, losses = lr_finder.results['lr'], lr_finder.results['loss']
+        lrs, losses = lr_finder.results['lr'][:-skip_last], lr_finder.results['loss'][:-skip_last]
         fig, ax = plt.subplots(1,1)
         ax.plot(lrs, losses)
         ax.set_xscale('log')
