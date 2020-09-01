@@ -164,8 +164,6 @@ class SkinDataModule(pl.LightningDataModule):
 
         self.val_transform = get_default_val_transform(image_size)
 
-        self.transform = transform
-
         self.dims = (3, image_size, image_size)
 
     def setup(self, stage):
