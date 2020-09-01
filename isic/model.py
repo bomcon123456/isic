@@ -80,20 +80,20 @@ class Model(LightningModule):
     def forward(self, x):
         return self.model(x)
 
-    def training_step(self, batch, batch_idx):
+    def shared_step(self, batch, batch_id):
         x, y = batch['img'], batch['label']
         y_hat = self(x)
-        loss = self.loss_func(y_hat, y)
-        acc = FM.accuracy(y_hat, y, num_classes=7)
+        return self.loss_func(y_hat, y)
+
+    def training_step(self, batch, batch_idx):
+        loss = self.shared_step(batch, batch_idx)
         result = pl.TrainResult(minimize=loss)
         result.log('train_loss', loss)
         result.log('train_acc', acc, prog_bar=True)
         return result
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch['img'], batch['label']
-        y_hat = self(x)
-        loss = self.loss_func(y_hat, y)
+        loss = self.shared_step(batch, batch_idx)
         acc = FM.accuracy(y_hat, y, num_classes=7)
         result = pl.EvalResult(checkpoint_on=loss)
         result.log('val_loss', loss, prog_bar=True)
