@@ -89,7 +89,7 @@ class Model(LightningModule):
         loss, _ = self.shared_step(batch, batch_idx)
         result = pl.TrainResult(minimize=loss)
         result.log('train_loss', loss)
-            return result
+        return result
 
     def validation_step(self, batch, batch_idx):
         loss, (y_hat, y) = self.shared_step(batch, batch_idx)
