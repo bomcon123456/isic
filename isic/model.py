@@ -49,6 +49,8 @@ class Model(LightningModule):
         for p in get_bias_batchnorm_params(self.model, True):
             p.skip_wd = True
 
+        self.m_bacc = pl.metrics.sklearns.BalancedAccuracy()
+
         n_groups = self.create_opt(torch.optim.Adam, None)
         freeze(self, n_groups)
 
@@ -94,9 +96,16 @@ class Model(LightningModule):
     def validation_step(self, batch, batch_idx):
         loss, (y_hat, y) = self.shared_step(batch, batch_idx)
         acc = FM.accuracy(y_hat, y, num_classes=7)
+        preds = y_hat.argmax(1)
+        precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
+        b_acc = self.m_bacc(preds, y)
         result = pl.EvalResult(checkpoint_on=loss)
         result.log('val_loss', loss, prog_bar=True)
         result.log('val_acc', acc, prog_bar=True)
+        result.log('val_precision', precision, prog_bar=True)
+        result.log('val_recall', recall, prog_bar=True)
+        result.log('val_balanced_acc', b_acc, prog_bar=True)
+
         return result
 
     def create_opt(self, opt_func, sched_func, lr=None, wd=None, skip_bn_wd=True):
