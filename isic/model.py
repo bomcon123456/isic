@@ -105,7 +105,6 @@ class Model(LightningModule):
         if wd is None:
             wd = self.hparams.wd
 
-
         param_groups = self.get_params(skip_bn_wd)
         n_groups = real_n_groups = len(param_groups)
         if skip_bn_wd:
