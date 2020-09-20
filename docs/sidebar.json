@@ -1,17 +1,18 @@
 {
   "isic": {
     "Overview": "/",
-    "Cutmix Callback": "/cb_cutmix",
-    "Freeze/ Unfreeze Callback": "/cb_freeze",
-    "HyperparamsLoggerCallback": "/cb_hyperparamlogger",
-    "LogTableMetricsCallback": "/cb_logtable",
-    "Mixup Callback": "/cb_mixup",
-    "Config": "/config",
-    "Hook": "/hook",
-    "Layers": "/layers",
-    "Models": "/model",
-    "Data Sampler": "/sampler",
-    "Utils": "/utils",
-    "UtilsModel": "/utils_model"
+    "Cutmix Callback": "cb_cutmix.html",
+    "Freeze/ Unfreeze Callback": "cb_freeze.html",
+    "HyperparamsLoggerCallback": "cb_hyperparamlogger.html",
+    "LogTableMetricsCallback": "cb_logtable.html",
+    "Mixup Callback": "cb_mixup.html",
+    "Config": "config.html",
+    "Dataset": "dataset_dict.html",
+    "Hook": "hook.html",
+    "Layers": "layers.html",
+    "Models": "model.html",
+    "Data Sampler": "sampler.html",
+    "Utils": "utils.html",
+    "UtilsModel": "utils_model.html"
   }
 }

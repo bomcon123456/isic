@@ -11,40 +11,43 @@ entries:
       url: /
     - output: web,pdf
       title: Cutmix Callback
-      url: /cb_cutmix
+      url: cb_cutmix.html
     - output: web,pdf
       title: Freeze/ Unfreeze Callback
-      url: /cb_freeze
+      url: cb_freeze.html
     - output: web,pdf
       title: HyperparamsLoggerCallback
-      url: /cb_hyperparamlogger
+      url: cb_hyperparamlogger.html
     - output: web,pdf
       title: LogTableMetricsCallback
-      url: /cb_logtable
+      url: cb_logtable.html
     - output: web,pdf
       title: Mixup Callback
-      url: /cb_mixup
+      url: cb_mixup.html
     - output: web,pdf
       title: Config
-      url: /config
+      url: config.html
+    - output: web,pdf
+      title: Dataset
+      url: dataset_dict.html
     - output: web,pdf
       title: Hook
-      url: /hook
+      url: hook.html
     - output: web,pdf
       title: Layers
-      url: /layers
+      url: layers.html
     - output: web,pdf
       title: Models
-      url: /model
+      url: model.html
     - output: web,pdf
       title: Data Sampler
-      url: /sampler
+      url: sampler.html
     - output: web,pdf
       title: Utils
-      url: /utils
+      url: utils.html
     - output: web,pdf
       title: UtilsModel
-      url: /utils_model
+      url: utils_model.html
     output: web
     title: isic
   output: web
