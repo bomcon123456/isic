@@ -66,6 +66,7 @@ class BaselineModel(LightningModule):
         result.log('val_precision', precision, prog_bar=True)
         result.log('val_recall', recall, prog_bar=True)
         result.log('val_balanced_acc', b_acc, prog_bar=True)
+        return result
 
     def test_step(self, batch, batch_idx):
         return self.validation_step(batch, batch_idx)
