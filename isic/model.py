@@ -58,6 +58,7 @@ class BaselineModel(LightningModule):
         acc = FM.accuracy(y_hat, y, num_classes=7)
         preds = y_hat.argmax(1)
         precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
+        f1 = FM.f1_score(y_hat, y, num_classes=7)
 #         test = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
         b_acc = self.m_bacc(preds, y)
         result = pl.EvalResult(checkpoint_on=loss)
@@ -65,6 +66,7 @@ class BaselineModel(LightningModule):
         result.log('val_acc', acc, prog_bar=True)
         result.log('val_precision', precision, prog_bar=True)
         result.log('val_recall', recall, prog_bar=True)
+        result.log('F1', recall, prog_bar=True)
         result.log('val_balanced_acc', b_acc, prog_bar=True)
         return result
 
