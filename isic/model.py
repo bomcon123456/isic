@@ -35,6 +35,8 @@ class BaselineModel(LightningModule):
         self.model = getattr(models, arch)(pretrained=True)
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
+
+        self.m_bacc = pl.metrics.sklearns.BalancedAccuracy()
         self.loss_func = F.cross_entropy
 
     def forward(self, x):
@@ -56,8 +58,7 @@ class BaselineModel(LightningModule):
         acc = FM.accuracy(y_hat, y, num_classes=7)
         preds = y_hat.argmax(1)
         precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
-        test = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
-        print(test)
+#         test = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
         b_acc = self.m_bacc(preds, y)
         result = pl.EvalResult(checkpoint_on=loss)
         result.log('val_loss', loss, prog_bar=True)
