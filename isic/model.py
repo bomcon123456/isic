@@ -44,7 +44,6 @@ class BaselineModel(LightningModule):
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
 
-        self.m_bacc = pl.metrics.sklearns.BalancedAccuracy()
         self.loss_func = F.cross_entropy
 
     def forward(self, x):
@@ -74,24 +73,22 @@ class BaselineModel(LightningModule):
         result = pl.EvalResult()
         y_hat = out.y_hat
         y = out.y
-        avg_val_loss = torch.tensor(out.loss).mean()
+        avg_val_loss = out.loss.mean()
         acc = FM.accuracy(y_hat, y, num_classes=7)
         preds = y_hat.argmax(1)
         precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
         f1 = FM.f1_score(y_hat, y, num_classes=7)
         prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
-        b_acc = self.m_bacc(preds, y)
 
         result = pl.EvalResult()
         result.log('val_loss', avg_val_loss, prog_bar=True)
         result.log('val_acc', acc, prog_bar=True)
-        result.log('val_balanced_acc', b_acc, prog_bar=True)
         result.log('val_precision', precision, prog_bar=True)
         result.log('val_recall', recall, prog_bar=True)
         result.log('F1', f1, prog_bar=True)
         metrics = {
             "precision": prec_arr,
-            "recal": recall_arr,
+            "recall": recall_arr,
         }
         log_metrics_per_key(result, metrics)
         return result
@@ -99,13 +96,13 @@ class BaselineModel(LightningModule):
 
     def test_step(self, batch, batch_idx):
         loss, (y_hat, y) = self.shared_step(batch, batch_idx)
-        result = EvalResult()
+        result = pl.EvalResult()
         result.y = y
         result.y_hat = y_hat
         return result
 
     def test_epoch_end(self, out):
-        result = EvalResult()
+        result = pl.EvalResult()
         y_hat = out.y_hat
         y = out.y
         result.my_y_hat = y_hat
@@ -116,12 +113,9 @@ class BaselineModel(LightningModule):
         precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
         prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
         f1 = FM.f1_score(y_hat, y, num_classes=7)
-        b_acc = self.m_bacc(preds, y)
 
         result = pl.EvalResult()
-        result.log('val_loss', loss)
         result.log('val_acc', acc)
-        result.log('val_balanced_acc', b_acc)
         result.log('val_precision', precision)
         result.log('val_recall', recall)
         result.log('F1', f1)
@@ -130,6 +124,10 @@ class BaselineModel(LightningModule):
             "recal": recall_arr,
         }
         log_metrics_per_key(result, metrics)
+        result.write('y_preds', preds)
+        torch.save(preds, 'preds.pt')
+        torch.save(labels, 'labels.pt')
+
         return result
 
     def configure_optimizers(self):

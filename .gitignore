@@ -1,3 +1,6 @@
+# torch save files
+*.pt
+
 *.bak
 .gitattributes
 .last_checked
