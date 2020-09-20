@@ -42,11 +42,12 @@ def text2html_table(items):
 # Cell
 #export
 class LogTableMetricsCallback(Callback):
-    def __init__(self):
+    def __init__(self, log_html=False):
         super().__init__()
         self.metrics = []
         self.headers = []
         self.rows = []
+        self.log_html=log_html
         self.out = None
 
     def on_epoch_start(self, trainer, pl_module):
@@ -82,3 +83,8 @@ class LogTableMetricsCallback(Callback):
 #         print(trainer.progress_bar_dict)
 #         print(trainer.optimizers)
 #         print(trainer.lr_schedulers)
+
+    def on_train_end(self, trainer, pl_module):
+        if self.log_html:
+            import wandb
+            trainer.logger.log({"train_log": wandb.Html(HTML(text2html_table([self.headers, *self.rows])))})
