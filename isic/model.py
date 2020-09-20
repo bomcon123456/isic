@@ -66,7 +66,7 @@ class BaselineModel(LightningModule):
         result.log('val_acc', acc, prog_bar=True)
         result.log('val_precision', precision, prog_bar=True)
         result.log('val_recall', recall, prog_bar=True)
-        result.log('F1', recall, prog_bar=True)
+        result.log('F1', f1, prog_bar=True)
         result.log('val_balanced_acc', b_acc, prog_bar=True)
         return result
 
