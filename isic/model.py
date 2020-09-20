@@ -59,19 +59,48 @@ class BaselineModel(LightningModule):
         preds = y_hat.argmax(1)
         precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
         f1 = FM.f1_score(y_hat, y, num_classes=7)
-#         test = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
+        prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
         b_acc = self.m_bacc(preds, y)
-        result = pl.EvalResult(checkpoint_on=loss)
+        result = pl.EvalResult()
         result.log('val_loss', loss, prog_bar=True)
         result.log('val_acc', acc, prog_bar=True)
         result.log('val_precision', precision, prog_bar=True)
         result.log('val_recall', recall, prog_bar=True)
+        result.log('val_precision_arr', prec_arr, prog_bar=True)
+        result.log('val_recall_arr', recall_arr, prog_bar=True)
         result.log('F1', f1, prog_bar=True)
         result.log('val_balanced_acc', b_acc, prog_bar=True)
         return result
 
     def test_step(self, batch, batch_idx):
-        return self.validation_step(batch, batch_idx)
+        loss, (y_hat, y) = self.shared_step(batch, batch_idx)
+        result = EvalResult()
+        result.y = y
+        result.y_hat = y_hat
+        return result
+
+    def test_epoch_end(self, out):
+        result = EvalResult()
+        y_hat = out.y_hat
+        y = out.y
+        result.my_y_hat = y_hat
+        result.my_y = y
+        acc = FM.accuracy(y_hat, y, num_classes=7)
+        preds = y_hat.argmax(1)
+        precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
+        f1 = FM.f1_score(y_hat, y, num_classes=7)
+        prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
+        b_acc = self.m_bacc(preds, y)
+        result = pl.EvalResult()
+        result.log('val_loss', loss)
+        result.log('val_acc', acc)
+        result.log('val_precision', precision)
+        result.log('val_recall', recall)
+        result.log('val_precision_arr', prec_arr)
+        result.log('val_recall_arr', recall_arr)
+        result.log('F1', f1)
+        result.log('val_balanced_acc', b_acc)
+        return result
 
     def configure_optimizers(self):
         opt = torch.optim.Adam(self.parameters(), lr=self.hparams.lr)

@@ -87,4 +87,4 @@ class LogTableMetricsCallback(Callback):
     def on_train_end(self, trainer, pl_module):
         if self.log_html:
             import wandb
-            trainer.logger.log({"train_log": wandb.Html(HTML(text2html_table([self.headers, *self.rows])))})
+            trainer.logger.experiment.log({"train_table_log": wandb.Html(HTML(text2html_table([self.headers, *self.rows])))})
