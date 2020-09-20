@@ -126,7 +126,7 @@ class BaselineModel(LightningModule):
         log_metrics_per_key(result, metrics)
         result.write('y_preds', preds)
         torch.save(preds, 'preds.pt')
-        torch.save(labels, 'labels.pt')
+        torch.save(y, 'labels.pt')
 
         return result
 
