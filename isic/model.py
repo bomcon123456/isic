@@ -35,31 +35,42 @@ class BaselineModel(LightningModule):
         self.model = getattr(models, arch)(pretrained=True)
         num_ftrs = self.model.fc.in_features
         self.model.fc = nn.Linear(num_ftrs, 7)
+        self.loss_func = F.cross_entropy
 
     def forward(self, x):
         return self.model(x)
 
-    def training_step(self, batch, batch_idx):
-        x, y = batch
+    def shared_step(self, batch, batch_id):
+        x, y = batch['img'], batch['label']
         y_hat = self(x)
-        loss = F.cross_entropy(y_hat, y)
-        acc = FM.accuracy(y_hat, y, num_classes=7)
+        return self.loss_func(y_hat, y), (y_hat, y)
+
+    def training_step(self, batch, batch_idx):
+        loss, _ = self.shared_step(batch, batch_idx)
         result = pl.TrainResult(minimize=loss)
         result.log('train_loss', loss)
         return result
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch
-        y_hat = self(x)
-        loss = F.cross_entropy(y_hat, y)
+        loss, (y_hat, y) = self.shared_step(batch, batch_idx)
         acc = FM.accuracy(y_hat, y, num_classes=7)
+        preds = y_hat.argmax(1)
+        precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
+        test = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='none')
+        print(test)
+        b_acc = self.m_bacc(preds, y)
         result = pl.EvalResult(checkpoint_on=loss)
         result.log('val_loss', loss, prog_bar=True)
         result.log('val_acc', acc, prog_bar=True)
-        return result
+        result.log('val_precision', precision, prog_bar=True)
+        result.log('val_recall', recall, prog_bar=True)
+        result.log('val_balanced_acc', b_acc, prog_bar=True)
+
+    def test_step(self, batch, batch_idx):
+        return self.validation_step(batch, batch_idx)
 
     def configure_optimizers(self):
-        opt = torch.optim.Adam(self.parameters(), lr=self.hypers.lr)
+        opt = torch.optim.Adam(self.parameters(), lr=self.hparams.lr)
         return opt
 
 # Cell
@@ -133,6 +144,8 @@ class Model(LightningModule):
         acc = FM.accuracy(y_hat, y, num_classes=7)
         preds = y_hat.argmax(1)
         precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
+        test = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='none')
+        print(test)
         b_acc = self.m_bacc(preds, y)
         result = pl.EvalResult(checkpoint_on=loss)
         result.log('val_loss', loss, prog_bar=True)
