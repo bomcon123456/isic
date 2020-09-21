@@ -4,7 +4,7 @@ __all__ = ['set_require_grad', 'freeze_to', 'freeze', 'unfreeze', 'get_num_ftrs'
            'create_head', 'create_body', 'requires_grad', 'init_default', 'cond_init', 'apply_leaf', 'apply_init',
            'norm_types', 'get_bias_batchnorm_params', 'print_grad_block', 'check_attrib_module',
            'get_module_with_attrib', 'lr_find', 'ParameterModule', 'has_params', 'total_params',
-           'children_and_parameters', 'flatten_model', 'in_channels', 'one_param']
+           'children_and_parameters', 'flatten_model', 'in_channels', 'one_param', 'log_metrics_per_key']
 
 # Cell
 from functools import partial
@@ -311,3 +311,11 @@ def in_channels(m):
 def one_param(m):
     "First parameter in `m`"
     return first(m.parameters())
+
+# Cell
+def log_metrics_per_key(logger, metrics):
+    keys = ['akiec', 'bcc', 'bkl', 'df', 'nv', 'mel', 'vasc']
+    for m_k, v in metrics.items():
+        for i,k in enumerate(keys):
+            logger.log(f"val_{m_k}_{k}", v[i], prog_bar=True)
+            logger.log(f"val_{m_k}_{k}", v[i], prog_bar=True)

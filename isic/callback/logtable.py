@@ -79,10 +79,6 @@ class LogTableMetricsCallback(Callback):
         if not self.out:
             self.out = display(HTML(text2html_table([self.headers, *self.rows])), display_id=True)
         self.out.update(HTML(text2html_table([self.headers, *self.rows])))
-#         print(self.metrics)
-#         print(trainer.progress_bar_dict)
-#         print(trainer.optimizers)
-#         print(trainer.lr_schedulers)
 
     def on_train_end(self, trainer, pl_module):
         if self.log_html:

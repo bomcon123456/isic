@@ -32,7 +32,6 @@ index = {"CutmixDict": "cb_cutmix.ipynb",
          "MixLoss": "layers.ipynb",
          "LabelSmoothingCrossEntropy": "layers.ipynb",
          "LinBnDrop": "layers.ipynb",
-         "log_metrics_per_key": "model.ipynb",
          "BaselineModel": "model.ipynb",
          "Model": "model.ipynb",
          "fit_one_cycle": "model.ipynb",
@@ -79,7 +78,8 @@ index = {"CutmixDict": "cb_cutmix.ipynb",
          "children_and_parameters": "utils_model.ipynb",
          "flatten_model": "utils_model.ipynb",
          "in_channels": "utils_model.ipynb",
-         "one_param": "utils_model.ipynb"}
+         "one_param": "utils_model.ipynb",
+         "log_metrics_per_key": "utils_model.ipynb"}
 
 modules = ["callback/cutmix.py",
            "callback/freeze.py",
@@ -92,6 +92,7 @@ modules = ["callback/cutmix.py",
            "layers.py",
            "model.py",
            "sampler.py",
+           "train.py",
            "utils/core.py",
            "utils/model.py"]
 
