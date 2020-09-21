@@ -17,6 +17,7 @@ jobs:
         pip install matplotlib
         pip install pytorch-lightning
         pip install torchvision
+        pip install pandas
     - name: Read all notebooks
       run: |
         nbdev_read_nbs
