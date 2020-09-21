@@ -15,6 +15,7 @@ jobs:
         pip install -e .
         pip install fastcore==1.0.9
         pip install matplotlib
+        pip install pytorch-lightning
     - name: Read all notebooks
       run: |
         nbdev_read_nbs
