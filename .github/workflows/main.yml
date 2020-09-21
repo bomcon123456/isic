@@ -12,10 +12,11 @@ jobs:
     - name: Install the library
       run: |
         pip install nbdev jupyter
-        pip install -e .
+        pip install -Uqe .
         pip install fastcore==1.0.9
         pip install matplotlib
         pip install pytorch-lightning
+        pip install torchvision
     - name: Read all notebooks
       run: |
         nbdev_read_nbs
