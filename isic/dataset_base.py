@@ -140,7 +140,7 @@ class SkinDataset(Dataset):
 class SkinDataModule(pl.LightningDataModule):
     def __init__(self, df_path=PathConfig.CSV_PATH, valid_size=0.2, bs=64):
         self.df_path = df_path
-        self.valid_size = 0.2
+        self.valid_size = valid_size
         self.bs = bs
         self.t_transform = transforms.Compose([
             transforms.Resize(350),
@@ -167,11 +167,11 @@ class SkinDataModule(pl.LightningDataModule):
         self.dims = tuple(self.train_ds[0]["img"].shape)
 
     def train_dataloader(self):
-        return DataLoader(self.train_ds, batch_size=self.bs, shuffle=True, num_workers=4)
+        return DataLoader(self.train_ds, batch_size=self.bs, shuffle=True, num_workers=4, pin_memory=True)
 
     def val_dataloader(self):
-        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4)
+        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4, pin_memory=True)
 
     def test_dataloader(self):
         #TODO
-        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4)
+        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4, pin_memory=True)

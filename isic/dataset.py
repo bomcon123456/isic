@@ -51,11 +51,11 @@ class SkinLabels:
     lesion_type_vi_dict = {
         'nv': 'Nốt ruồi',
         'mel': 'Ung thư hắc tố',
-        'bkl': 'U sừng hóa ác tính ',
-        'bcc': 'U da ung thư tế bào đáy',
+        'bkl': 'Dày sừng lành tính',
+        'bcc': 'Ung thư biểu mô tế bào đáy',
         'akiec': 'Dày sừng quang hóa',
         'vasc': 'Thương tổn mạch máu',
-        'df': 'U da lành tính'
+        'df': 'U xơ da'
     }
 
 # Cell
@@ -170,7 +170,7 @@ class SkinDataset(Dataset):
 class SkinDataModule(pl.LightningDataModule):
     def __init__(self, image_size=224, valid_size=0.2, bs=64, df_path=PathConfig.CSV_PATH, imbalanced_sampler=True, transform=None, cutout=True):
         self.df_path = df_path
-        self.valid_size = 0.2
+        self.valid_size = valid_size
         self.bs = bs
         self.imbalanced_sampler = imbalanced_sampler
 
@@ -206,15 +206,15 @@ class SkinDataModule(pl.LightningDataModule):
     def train_dataloader(self):
         return DataLoader(self.train_ds, batch_size=self.bs,
                           sampler=self.sampler,
-                          num_workers=4
+                          num_workers=4, pin_memory=True
                          )
 
     def val_dataloader(self):
-        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4)
+        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4, pin_memory=True)
 
     def test_dataloader(self):
         #TODO
-        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4)
+        return DataLoader(self.val_ds, batch_size=self.bs, num_workers=4, pin_memory=True)
 
 # Cell
 def get_default_train_transform(image_size=224, cut_out=True, no_norm=False):
