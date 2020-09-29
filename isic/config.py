@@ -13,7 +13,7 @@ class PathConfig:
     #     IMAGE_PATH = '/content/data/images'
     #     CSV_PATH = '/content/data/HAM10000_metadata.csv'
 
-    DATA_PATH = "D:\Workspace\ML\HAM10000\data"
+    DATA_PATH = "/Work/Workspace/ML/HAM10000/data"
     IMAGE_PATH = DATA_PATH + "/images"
     CSV_PATH = DATA_PATH + "/HAM10000_metadata.csv"
 
