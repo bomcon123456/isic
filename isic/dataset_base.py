@@ -138,10 +138,11 @@ class SkinDataset(Dataset):
 
 # Cell
 class SkinDataModule(pl.LightningDataModule):
-    def __init__(self, df_path=PathConfig.CSV_PATH, valid_size=0.2, bs=64):
+    def __init__(self, df_path=PathConfig.CSV_PATH, valid_size=0.2, bs=64, train_df=None, valid_df=None):
         self.df_path = df_path
         self.valid_size = valid_size
         self.bs = bs
+        self.train_df, self.valid_df = train_df, valid_df
         self.t_transform = transforms.Compose([
             transforms.Resize(350),
             transforms.RandomResizedCrop((224, 224)),
@@ -159,10 +160,15 @@ class SkinDataModule(pl.LightningDataModule):
         self.dims = (3, 224, 224)
 
     def setup(self, stage):
-        df = pd.read_csv(PathConfig.CSV_PATH)
-        train_df, valid_df, self.labels = preprocess_df(df, self.valid_size)
-        self.train_ds = SkinDataset(train_df, self.t_transform, self.labels)
-        self.val_ds = SkinDataset(valid_df, self.v_transform, self.labels)
+        if not self.train_df:
+            df = pd.read_csv(PathConfig.CSV_PATH)
+            self.train_df, self.valid_df, self.labels = preprocess_df(df, self.valid_size)
+        else:
+            # If we pass train_df from the beginning, means that we use the augmented folder
+            self.train_df["path"] = PathConfig.AUG_PATH + '/' + self.train_df['image_id'] + '.jpg'
+            self.valid_df["path"] = PathConfig.AUG_PATH + '/' + self.valid_df['image_id'] + '.jpg'
+        self.train_ds = SkinDataset(self.train_df, self.t_transform, self.labels)
+        self.val_ds = SkinDataset(self.valid_df, self.v_transform, self.labels)
 
         self.dims = tuple(self.train_ds[0]["img"].shape)
 
