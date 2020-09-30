@@ -97,7 +97,7 @@ class BaselineModel(LightningModule):
 
     def test_epoch_end(self, out):
         result = self.calc_and_log_metrics(out.y_hat, out.y)
-        torch.save(out.y_hat.argmax(1).cpu(), 'preds.pt')
+        torch.save(out.y_hat.cpu(), 'preds.pt')
         torch.save(out.y.cpu(), 'labels.pt')
 
         return result
