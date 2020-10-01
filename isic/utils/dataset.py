@@ -2,7 +2,7 @@
 
 __all__ = ['SkinLabels', 'from_label_idx_to_key', 'preprocess_df', 'get_default_train_transform',
            'get_advanced_train_transform', 'get_default_val_transform', 'split_df_to_cat_num_df', 'undersampling_df',
-           'oversampling_df', 'AdvancedHairAugmentation', 'DrawHair', 'Microscope']
+           'oversampling_df', 'oversampling_not_flat_df', 'AdvancedHairAugmentation', 'DrawHair', 'Microscope']
 
 # Cell
 import copy
@@ -193,6 +193,15 @@ def oversampling_df(df):
     X_resampled, y_resampled = ros.fit_resample(df.drop(columns=['label_index']), df['label_index'])
     X_resampled['label_index'] = y_resampled
     return X_resampled
+
+# Cell
+def oversampling_not_flat_df(df, data_aug_rate=None):
+    if not data_aug_rate:
+        data_aug_rate = [15,10,5,50,0,5,40]
+    for i in range(7):
+        if data_aug_rate[i]:
+            df=df.append([df.loc[df['label_index'] == i,:]]*(data_aug_rate[i]-1), ignore_index=True)
+    return df
 
 # Cell
 class AdvancedHairAugmentation:

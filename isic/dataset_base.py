@@ -20,6 +20,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 from .config import *
+from .utils.dataset import undersampling_df, oversampling_df, oversampling_not_flat_df
+
 
 # Cell
 class SkinLabels():
@@ -160,7 +162,7 @@ class SkinDataModule(pl.LightningDataModule):
         self.dims = (3, 224, 224)
 
     def setup(self, stage):
-        if not self.train_df:
+        if self.train_df is not None or stage=='test':
             df = pd.read_csv(PathConfig.CSV_PATH)
             self.train_df, self.valid_df, self.labels = preprocess_df(df, self.valid_size)
         else:
