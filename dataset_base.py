@@ -144,16 +144,19 @@ class SkinDataModule(pl.LightningDataModule):
         self.bs = bs
         self.t_transform = transforms.Compose([
             transforms.Resize(350),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.RandomRotation(20),
             transforms.RandomResizedCrop((224, 224)),
             transforms.ToTensor(),
-#                 transforms.Normalize(mean=[0.7579628, 0.5485365, 0.5737883],
-#                                      std=[0.1419983, 0.15297663, 0.17065412])
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
         ])
         self.v_transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
-#                 transforms.Normalize(mean=[0.7579628, 0.5485365, 0.5737883],
-#                                      std=[0.1419983, 0.15297663, 0.17065412])
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
         ])
 
         self.dims = (3, 224, 224)
