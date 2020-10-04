@@ -2,7 +2,8 @@
 
 __all__ = ['SkinLabels', 'from_label_idx_to_key', 'preprocess_df', 'get_default_train_transform',
            'get_advanced_train_transform', 'get_default_val_transform', 'split_df_to_cat_num_df', 'undersampling_df',
-           'oversampling_df', 'oversampling_not_flat_df', 'AdvancedHairAugmentation', 'DrawHair', 'Microscope']
+           'oversampling_df', 'oversampling_not_flat_df', 'AdvancedHairAugmentation', 'DrawHair', 'Microscope',
+           'gen_new_dts', 'get_class_weights']
 
 # Cell
 import copy
@@ -344,3 +345,56 @@ class Microscope:
 
     def __repr__(self):
         return f'{self.__class__.__name__}(p={self.p})'
+
+# Cell
+def gen_new_dts(data_gen_aug=None):
+    save_path = '/Work/Workspace/ML/HAM10000/aug/images/'
+    if data_gen_aug is None:
+        data_gen_aug = [5, 5, 3, 10, 0, 3, 10]
+    df = pd.read_csv(PathConfig.CSV_PATH)
+    train_df, valid_df, labels = preprocess_df(df, 0.2)
+    t1 = transforms.Compose([
+        AdvancedHairAugmentation(8,hairs_folder='/Work/Workspace/ML/HAM10000/data/black_hair/'),
+        Microscope(p=0.5),
+    ])
+    t2 = transforms.Compose([
+        DrawHair(8),
+        Microscope(p=0.5),
+    ])
+    ts = [t1,t1,t2]
+    for index, row in train_df.iterrows():
+        label_idx = row['label_index']
+        if data_gen_aug[label_idx]:
+            for i in range(data_gen_aug[label_idx]):
+                path = row['path']
+                image_id = row['image_id'] + '_' + str(i)
+                new_path = save_path + image_id + '.jpg'
+
+                image = cv2.imread(path)
+                # Generate augment image
+                idx = random.randint(0,2)
+                tfs = ts[idx](image)
+
+                # Add to dataframe
+                new_row = row.copy()
+                new_row["image_id"] = image_id
+                new_row["path"] = new_path
+                train_df = train_df.append(new_row)
+                # save
+                cv2.imwrite(new_path, tfs)
+    # Save train_df, valid_df to csv
+    train_df = train_df.reset_index()
+    train_df = train_df.drop(columns=['index','path'])
+    valid_df = valid_df.drop(columns=['path'])
+
+    train_df.to_csv('/Work/Workspace/ML/HAM10000/aug/train.csv', index=False)
+    valid_df.to_csv('/Work/Workspace/ML/HAM10000/aug/valid.csv', index=False)
+    return train_df, valid_df
+
+# Cell
+def get_class_weights(target):
+    class_sample_count = np.unique(target, return_counts=True)[1]
+    weight = 1. / class_sample_count
+    samples_weight = weight[target]
+    samples_weight = torch.from_numpy(samples_weight)
+    return weight, samples_weight
