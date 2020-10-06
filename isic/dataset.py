@@ -89,7 +89,8 @@ class SkinDataset(Dataset):
 
 # Cell
 class SkinDataModule(pl.LightningDataModule):
-    def __init__(self, image_size=224, valid_size=0.2, bs=64, df_path=PathConfig.CSV_PATH, imbalanced_sampler=True, transform=None, cutout=True):
+    def __init__(self, image_size=224, valid_size=0.2, bs=64, df_path=PathConfig.CSV_PATH, imbalanced_sampler=True,
+                 transform=None, df_transform_func=None):
         self.df_path = df_path
         self.valid_size = valid_size
         self.bs = bs
@@ -97,9 +98,10 @@ class SkinDataModule(pl.LightningDataModule):
 
         self.train_transform = transform
         if self.train_transform is None:
-            self.train_transform = get_default_train_transform(image_size, cutout)
-
+            self.train_transform = get_default_train_transform(image_size)
         self.val_transform = get_default_val_transform(image_size)
+
+        self.df_transform_func = df_transform_func
 
         self.dims = (3, image_size, image_size)
 
@@ -109,14 +111,15 @@ class SkinDataModule(pl.LightningDataModule):
 
         if stage == 'fit' or stage is None:
             df = pd.read_csv(self.df_path)
-            train_df, valid_df, self.labels = preprocess_df(df, self.valid_size)
-            self.train_ds = SkinDataset(train_df, self.train_transform, self.labels)
-            self.val_ds = SkinDataset(valid_df, self.val_transform, self.labels)
+            self.train_df, self.valid_df, self.labels = preprocess_df(df, self.valid_size)
+            if self.df_transform_func is not None:
+                self.train_df = self.df_transform_func(self.train_df)
+            self.train_ds = SkinDataset(self.train_df, self.train_transform, self.labels)
+            self.val_ds = SkinDataset(self.valid_df, self.val_transform, self.labels)
 
+            self.sampler = RandomSampler(self.train_ds)
             if self.imbalanced_sampler:
                 self.sampler = ImbalancedDatasetSampler(self.train_ds, callback_get_label=_get_label)
-            else:
-                self.sampler = RandomSampler(self.train_ds)
 
             self.dims = tuple(self.train_ds[0]["img"].shape)
 

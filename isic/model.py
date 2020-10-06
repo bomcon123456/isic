@@ -109,7 +109,7 @@ class BaselineModel(LightningModule):
 
 # Cell
 class Model(LightningModule):
-    def __init__(self, lr=1e-2, wd=0., n_out=7, concat_pool=True, arch='resnet50'):
+    def __init__(self, lr=1e-2, wd=0., n_out=7, concat_pool=True, arch='resnet50', loss_func=None, verbose=True):
         super().__init__()
         self.save_hyperparameters()
         # create body
@@ -129,12 +129,15 @@ class Model(LightningModule):
         for p in get_bias_batchnorm_params(self.model, True):
             p.skip_wd = True
 
-        self.m_bacc = pl.metrics.sklearns.BalancedAccuracy()
-
         n_groups = self.create_opt(torch.optim.Adam, None)
         freeze(self, n_groups)
 
-        self.loss_func = LabelSmoothingCrossEntropy()
+        self.loss_func = loss_func
+        if self.loss_func is None:
+            self.loss_func = F.cross_entropy
+
+    def forward(self, x):
+        return self.model(x)
 
     def exclude_params_with_attrib(self, splits, skip_list=['skip_wd']):
         includes = []
@@ -150,6 +153,12 @@ class Model(LightningModule):
                     ins.append(param)
             includes.append(ins)
             excludes.append(exs)
+
+        if self.hparams.verbose:
+            print('Total splits = ', len(excludes))
+            for i in range(len(excludes)):
+                print(f'Split {i+1}: {len(excludes[i])} layers are excluded.')
+
         return includes + excludes
 
     def get_params(self, split_bn=True):
@@ -158,9 +167,6 @@ class Model(LightningModule):
             return self.exclude_params_with_attrib(splits)
         else:
             return self.split(self.model)
-
-    def forward(self, x):
-        return self.model(x)
 
     def shared_step(self, batch, batch_id):
         x, y = batch['img'], batch['label']
@@ -175,18 +181,50 @@ class Model(LightningModule):
 
     def validation_step(self, batch, batch_idx):
         loss, (y_hat, y) = self.shared_step(batch, batch_idx)
+        result = pl.EvalResult()
+        result.y = y
+        result.y_hat = y_hat
+        result.loss = loss
+        return result
+
+    def calc_and_log_metrics(self, y_hat, y):
         acc = FM.accuracy(y_hat, y, num_classes=7)
         preds = y_hat.argmax(1)
         precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
-        test = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
-        print(test)
-        b_acc = self.m_bacc(preds, y)
-        result = pl.EvalResult(checkpoint_on=loss)
-        result.log('val_loss', loss, prog_bar=True)
+        f1 = FM.f1_score(y_hat, y, num_classes=7)
+        prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
+
+        result = pl.EvalResult()
         result.log('val_acc', acc, prog_bar=True)
         result.log('val_precision', precision, prog_bar=True)
         result.log('val_recall', recall, prog_bar=True)
-        result.log('val_balanced_acc', b_acc, prog_bar=True)
+        result.log('F1', f1, prog_bar=True)
+        metrics = {
+            "precision": prec_arr,
+            "recall": recall_arr,
+        }
+        log_metrics_per_key(result, metrics)
+        return result
+
+    def validation_epoch_end(self, out):
+        avg_val_loss = out.loss.mean()
+
+        result = self.calc_and_log_metrics(out.y_hat, out.y)
+        result.log('val_loss', avg_val_loss, prog_bar=True)
+
+        return result
+
+    def test_step(self, batch, batch_idx):
+        _, (y_hat, y) = self.shared_step(batch, batch_idx)
+        result = pl.EvalResult()
+        result.y = y
+        result.y_hat = y_hat
+        return result
+
+    def test_epoch_end(self, out):
+        result = self.calc_and_log_metrics(out.y_hat, out.y)
+        torch.save(out.y_hat.cpu(), 'preds.pt')
+        torch.save(out.y.cpu(), 'labels.pt')
 
         return result
 
@@ -203,7 +241,8 @@ class Model(LightningModule):
             n_groups //= 2
 
         def _inner():
-            print('override_called')
+            if self.hparams.verbose:
+                print('Overriding_configure_optimizer...')
 
             lrs = generate_val_steps(lr, n_groups)
             if skip_bn_wd:
@@ -211,15 +250,17 @@ class Model(LightningModule):
             assert len(lrs) == real_n_groups, f"Trying to set {len(lrs)} values for LR but there are {n_groups} parameter groups."
 
             grps = []
-            for i, (pg, l) in enumerate(zip(param_groups, lrs)):
+            for i, (pg, pg_lr) in enumerate(zip(param_groups, lrs)):
                 grps.append({
                     "params": pg,
-                    "lr": l,
+                    "lr": pg_lr,
                     "weight_decay": wd if i < n_groups else 0.
                 })
 
-            print(lrs)
+            if self.hparams.verbose:
+                print('LRs for each layer:', lrs)
 
+            # Create a dummy optimizer, lr will be corrected by the scheduler.
             opt = opt_func(grps, lr=self.hparams.lr if isinstance(lr, slice) else lr)
             if sched_func is not None:
                 scheduler = sched_func(opt, max_lr=lrs)
@@ -230,8 +271,8 @@ class Model(LightningModule):
                     'reduce_on_plateau': False, # For ReduceLROnPlateau scheduler
                 }
                 return [opt], [sched]
-            else:
-                return [opt]
+            # Not use sched_func
+            return [opt]
 
         self.configure_optimizers = _inner
         return n_groups
@@ -243,7 +284,7 @@ def fit_one_cycle(epochs, model, datamodule, opt='Adam', max_lr=None, pct_start=
     if isinstance(opt, str):
         opt_func = getattr(torch.optim, opt, False)
         if not opt_func:
-            raise Exception("Invalid optimizer, please pass correct name as in pytorch.optim.")
+            raise Exception("Invalid optimizer, please pass correct name string as in pytorch.optim.")
     else:
         opt_func = opt
     sched_func = torch.optim.lr_scheduler.OneCycleLR

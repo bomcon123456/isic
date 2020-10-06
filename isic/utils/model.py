@@ -3,9 +3,8 @@
 __all__ = ['set_require_grad', 'freeze_to', 'freeze', 'unfreeze', 'get_num_ftrs', 'params', 'has_pool_type',
            'create_head', 'create_body', 'requires_grad', 'init_default', 'cond_init', 'apply_leaf', 'apply_init',
            'norm_types', 'get_bias_batchnorm_params', 'print_grad_block', 'check_attrib_module',
-           'get_module_with_attrib', 'lr_find', 'ParameterModule', 'has_params', 'total_params',
-           'children_and_parameters', 'flatten_model', 'in_channels', 'one_param', 'log_metrics_per_key', 'FocalLoss',
-           'FocalLoss_Ori']
+           'get_module_with_attrib', 'plot_lr_loss', 'lr_find', 'ParameterModule', 'has_params', 'total_params',
+           'children_and_parameters', 'flatten_model', 'in_channels', 'one_param', 'log_metrics_per_key', 'FocalLoss']
 
 # Cell
 from functools import partial
@@ -18,6 +17,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.models as models
+from torch.autograd import Variable
 
 import pytorch_lightning as pl
 from pytorch_lightning.core import LightningModule
@@ -216,7 +216,19 @@ def get_module_with_attrib(model, attrib='requires_grad'):
             print(n)
 
 # Cell
-def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100, exp=True, cpu=True, lr_find=True, skip_last=5, verbose=False):
+def plot_lr_loss(lrs, losses):
+    fig, ax = plt.subplots(1,1)
+    ax.plot(lrs, losses)
+    ax.set_xscale('log')
+    ax.xaxis.set_major_locator(LogLocator(base=10, numticks=12))
+    locmin = LogLocator(base=10.0,subs=np.arange(2, 10, 2)*.1,numticks=12)
+    ax.xaxis.set_minor_locator(locmin)
+    ax.xaxis.set_minor_formatter(NullFormatter())
+    return fig, ax
+
+# Cell
+def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100,
+            exp=True, cpu=True, fast_dev_run=False, skip_last=5, verbose=False):
     args = {}
     lr_finder=None
     if not cpu:
@@ -224,7 +236,10 @@ def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100, exp=True, cpu=True, 
             "gpus": 1,
             "precision": 16
         }
-    if lr_find:
+    if fast_dev_run:
+        trainer = pl.Trainer(fast_dev_run=True, **args)
+        trainer.fit(model, dm)
+    else:
         trainer = pl.Trainer(max_epochs=1, **args)
         lr_finder = trainer.lr_find(model, dm.train_dataloader(), dm.val_dataloader(),
                                     min_lr=min_lr, max_lr=max_lr,
@@ -233,13 +248,7 @@ def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100, exp=True, cpu=True, 
 
         # Inspect results
         lrs, losses = lr_finder.results['lr'][:-skip_last], lr_finder.results['loss'][:-skip_last]
-        fig, ax = plt.subplots(1,1)
-        ax.plot(lrs, losses)
-        ax.set_xscale('log')
-        ax.xaxis.set_major_locator(LogLocator(base=10, numticks=12))
-        locmin = LogLocator(base=10.0,subs=np.arange(2, 10, 2)*.1,numticks=12)
-        ax.xaxis.set_minor_locator(locmin)
-        ax.xaxis.set_minor_formatter(NullFormatter())
+        fig, ax = plot_lr_loss(lrs, losses)
 
         opt_lr = lr_finder.suggestion()
 
@@ -249,14 +258,14 @@ def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100, exp=True, cpu=True, 
         ax.set_xlabel("Learning Rate")
         print(f'LR suggestion: {opt_lr:e}')
 
-    else:
-        trainer = pl.Trainer(max_epochs=1, fast_dev_run=True, **args)
-        trainer.fit(model, dm)
     if verbose:
+        print('Optimizer Information:')
         print(trainer.optimizers[0])
+        print('='*88)
         print(('*'*30)+'Check requires_grad/ skip_wd' + ('*'*30))
+        print(('-'*40)+'    BODY    ' + ('-'*40))
         check_attrib_module(model.model[0])
-        print('-' * 80)
+        print(('*'*40)+'    HEAD    ' + ('*'*40))
         check_attrib_module(model.model[1])
 
     return lr_finder
@@ -322,10 +331,6 @@ def log_metrics_per_key(logger, metrics):
             logger.log(f"val_{m_k}_{k}", v[i], prog_bar=True)
 
 # Cell
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.autograd import Variable
 
 class FocalLoss(nn.Module):
     def __init__(self, class_num, alpha=None, gamma=2, size_average=True):
@@ -365,74 +370,4 @@ class FocalLoss(nn.Module):
             loss = batch_loss.mean()
         else:
             loss = batch_loss.sum()
-        return loss
-
-# Cell
-class FocalLoss_Ori(nn.Module):
-    """
-    This is a implementation of Focal Loss with smooth label cross entropy supported which is proposed in
-    'Focal Loss for Dense Object Detection. (https://arxiv.org/abs/1708.02002)'
-        Focal_Loss= -1*alpha*(1-pt)*log(pt)
-    :param num_class:
-    :param alpha: (tensor) 3D or 4D the scalar factor for this criterion
-    :param gamma: (float,double) gamma > 0 reduces the relative loss for well-classified examples (p>0.5) putting more
-                    focus on hard misclassified example
-    :param smooth: (float,double) smooth value when cross entropy
-    :param size_average: (bool, optional) By default, the losses are averaged over each loss element in the batch.
-    """
-
-    def __init__(self, num_class, alpha=[0.25,0.75], gamma=2, balance_index=-1, size_average=True):
-        super(FocalLoss_Ori, self).__init__()
-        self.num_class = num_class
-        self.alpha = alpha
-        self.gamma = gamma
-        self.size_average = size_average
-        self.eps = 1e-6
-
-        if isinstance(self.alpha, (list, tuple)):
-            assert len(self.alpha) == self.num_class
-            self.alpha = torch.Tensor(list(self.alpha))
-        elif isinstance(self.alpha, (float,int)):
-            assert 0<self.alpha<1.0, 'alpha should be in `(0,1)`)'
-            assert balance_index >-1
-            alpha = torch.ones((self.num_class))
-            alpha *= 1-self.alpha
-            alpha[balance_index] = self.alpha
-            self.alpha = alpha
-        elif isinstance(self.alpha,torch.Tensor):
-            self.alpha = self.alpha
-        else:
-            raise TypeError('Not support alpha type, expect `int|float|list|tuple|torch.Tensor`')
-
-    def forward(self, logit, target):
-
-        if logit.dim() > 2:
-            # N,C,d1,d2 -> N,C,m (m=d1*d2*...)
-            logit = logit.view(logit.size(0), logit.size(1), -1)
-            logit = logit.transpose(1, 2).contiguous() # [N,C,d1*d2..] -> [N,d1*d2..,C]
-            logit = logit.view(-1, logit.size(-1)) # [N,d1*d2..,C]-> [N*d1*d2..,C]
-        target = target.view(-1, 1) # [N,d1,d2,...]->[N*d1*d2*...,1]
-
-        # -----------legacy way------------
-        #  idx = target.cpu().long()
-        # one_hot_key = torch.FloatTensor(target.size(0), self.num_class).zero_()
-        # one_hot_key = one_hot_key.scatter_(1, idx, 1)
-        # if one_hot_key.device != logit.device:
-        #     one_hot_key = one_hot_key.to(logit.device)
-        # pt = (one_hot_key * logit).sum(1) + epsilon
-
-        # ----------memory saving way--------
-        pt = logit.gather(1, target).view(-1) + self.eps # avoid apply
-        logpt = pt.log()
-
-        if self.alpha.device != logpt.device:
-            alpha = self.alpha.to(logpt.device)
-            alpha_class = alpha.gather(0,target.view(-1))
-            logpt = alpha_class*logpt
-        loss = -1 * torch.pow(torch.sub(1.0, pt), self.gamma) * logpt
-
-        if self.size_average:
-            loss = loss.mean()
-        else:
-            loss = loss.sum()
         return loss

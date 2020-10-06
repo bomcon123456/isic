@@ -2,8 +2,8 @@
 
 __all__ = ['SkinLabels', 'from_label_idx_to_key', 'preprocess_df', 'get_default_train_transform',
            'get_advanced_train_transform', 'get_default_val_transform', 'split_df_to_cat_num_df', 'undersampling_df',
-           'oversampling_df', 'oversampling_not_flat_df', 'AdvancedHairAugmentation', 'DrawHair', 'Microscope',
-           'gen_new_dts', 'get_class_weights']
+           'oversampling_df', 'oversampling_not_flat_df', 'hybridsampling_df', 'AdvancedHairAugmentation', 'DrawHair',
+           'Microscope', 'gen_new_dts', 'get_class_weights']
 
 # Cell
 import copy
@@ -197,11 +197,25 @@ def oversampling_df(df):
 
 # Cell
 def oversampling_not_flat_df(df, data_aug_rate=None):
-    if not data_aug_rate:
+    if data_aug_rate is None:
         data_aug_rate = [15,10,5,50,0,5,40]
     for i in range(7):
         if data_aug_rate[i]:
             df=df.append([df.loc[df['label_index'] == i,:]]*(data_aug_rate[i]-1), ignore_index=True)
+    return df
+
+# Cell
+def hybridsampling_df(df, data_aug_rate=None):
+    if data_aug_rate is None:
+        data_aug_rate = [7, 7, 3, 15,-0.2, 4, 15]
+    for i in range(7):
+        if data_aug_rate[i]>0:
+            df=df.append([df.loc[df['label_index'] == i,:]]*(data_aug_rate[i]-1), ignore_index=True)
+        elif data_aug_rate[i]<0:
+            entries = df.loc[df['label_index'] == i,:].index.tolist()
+            dropIndices = np.random.choice(entries, size = int(len(entries)*abs(data_aug_rate[i])))
+            df = df.drop(dropIndices)
+            entries = df.loc[df['label_index'] == i,:].index.tolist()
     return df
 
 # Cell
@@ -348,7 +362,7 @@ class Microscope:
 
 # Cell
 def gen_new_dts(data_gen_aug=None):
-    save_path = '/Work/Workspace/ML/HAM10000/aug/images/'
+    save_path = 'D:/Workspace/ML/HAM10000/aug/images/'
     if data_gen_aug is None:
         data_gen_aug = [5, 5, 3, 10, 0, 3, 10]
     df = pd.read_csv(PathConfig.CSV_PATH)
@@ -370,10 +384,10 @@ def gen_new_dts(data_gen_aug=None):
                 image_id = row['image_id'] + '_' + str(i)
                 new_path = save_path + image_id + '.jpg'
 
-                image = cv2.imread(path)
-                # Generate augment image
-                idx = random.randint(0,2)
-                tfs = ts[idx](image)
+#                 image = cv2.imread(path)
+#                 # Generate augment image
+#                 idx = random.randint(0,2)
+#                 tfs = ts[idx](image)
 
                 # Add to dataframe
                 new_row = row.copy()
@@ -381,7 +395,7 @@ def gen_new_dts(data_gen_aug=None):
                 new_row["path"] = new_path
                 train_df = train_df.append(new_row)
                 # save
-                cv2.imwrite(new_path, tfs)
+#                 cv2.imwrite(new_path, tfs)
     # Save train_df, valid_df to csv
     train_df = train_df.reset_index()
     train_df = train_df.drop(columns=['index','path'])
@@ -394,6 +408,7 @@ def gen_new_dts(data_gen_aug=None):
 # Cell
 def get_class_weights(target):
     class_sample_count = np.unique(target, return_counts=True)[1]
+    print(class_sample_count)
     weight = 1. / class_sample_count
     samples_weight = weight[target]
     samples_weight = torch.from_numpy(samples_weight)
