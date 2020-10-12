@@ -64,9 +64,9 @@ class BaselineModel(LightningModule):
     def calc_and_log_metrics(self, y_hat, y):
         acc = FM.accuracy(y_hat, y, num_classes=7)
         preds = y_hat.argmax(1)
-        precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
-        f1 = FM.f1_score(y_hat, y, num_classes=7)
-        prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
+        precision, recall = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='macro')
+        f1 = FM.f1_score(y_hat, y, num_classes=7, class_reduction='macro')
+        prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='none')
 
         result = pl.EvalResult()
         result.log('val_acc', acc, prog_bar=True)
@@ -190,9 +190,9 @@ class Model(LightningModule):
     def calc_and_log_metrics(self, y_hat, y):
         acc = FM.accuracy(y_hat, y, num_classes=7)
         preds = y_hat.argmax(1)
-        precision, recall = FM.precision_recall(y_hat, y, num_classes=7)
-        f1 = FM.f1_score(y_hat, y, num_classes=7)
-        prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, reduction='none')
+        precision, recall = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='macro')
+        f1 = FM.f1_score(y_hat, y, num_classes=7, class_reduction='macro')
+        prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='none')
 
         result = pl.EvalResult()
         result.log('val_acc', acc, prog_bar=True)
@@ -272,7 +272,7 @@ class Model(LightningModule):
                 }
                 return [opt], [sched]
             # Not use sched_func
-            return [opt]
+            return opt
 
         self.configure_optimizers = _inner
         return n_groups

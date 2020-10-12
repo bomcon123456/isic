@@ -241,7 +241,7 @@ def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100,
         trainer.fit(model, dm)
     else:
         trainer = pl.Trainer(max_epochs=1, **args)
-        lr_finder = trainer.lr_find(model, dm.train_dataloader(), dm.val_dataloader(),
+        lr_finder = trainer.tuner.lr_find(model, dm.train_dataloader(), dm.val_dataloader(),
                                     min_lr=min_lr, max_lr=max_lr,
                                     num_training=n_train,
                                     mode='exponential' if exp else 'linear', early_stop_threshold=1e10)
