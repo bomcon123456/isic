@@ -213,7 +213,7 @@ class Model(LightningModule):
         _, (y_hat, y) = self.shared_step(batch, batch_idx)
         return {"y": y, "y_hat": y_hat}
 
-    def test_epoch_end(self, out):
+    def test_epoch_end(self, preds):
         ys = torch.cat([pred['y'] for pred in preds])
         y_hats = torch.cat([pred['y_hat'] for pred in preds])
         self.calc_and_log_metrics(y_hats, ys)
