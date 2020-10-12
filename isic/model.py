@@ -175,17 +175,9 @@ class Model(LightningModule):
 
     def training_step(self, batch, batch_idx):
         loss, _ = self.shared_step(batch, batch_idx)
-        result = pl.TrainResult(minimize=loss)
-        result.log('train_loss', loss)
-        return result
+        self.log('train_loss', loss)
 
-    def validation_step(self, batch, batch_idx):
-        loss, (y_hat, y) = self.shared_step(batch, batch_idx)
-        result = pl.EvalResult()
-        result.y = y
-        result.y_hat = y_hat
-        result.loss = loss
-        return result
+        return loss
 
     def calc_and_log_metrics(self, y_hat, y):
         acc = FM.accuracy(y_hat, y, num_classes=7)
@@ -194,39 +186,39 @@ class Model(LightningModule):
         f1 = FM.f1_score(y_hat, y, num_classes=7, class_reduction='macro')
         prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='none')
 
-        result = pl.EvalResult()
-        result.log('val_acc', acc, prog_bar=True)
-        result.log('val_precision', precision, prog_bar=True)
-        result.log('val_recall', recall, prog_bar=True)
-        result.log('F1', f1, prog_bar=True)
+        self.log('val_acc', acc, prog_bar=True)
+        self.log('val_precision', precision, prog_bar=True)
+        self.log('val_recall', recall, prog_bar=True)
+        self.log('F1', f1, prog_bar=True)
         metrics = {
             "precision": prec_arr,
             "recall": recall_arr,
         }
-        log_metrics_per_key(result, metrics)
-        return result
+        log_metrics_per_key(self, metrics)
 
-    def validation_epoch_end(self, out):
-        avg_val_loss = out.loss.mean()
+    def validation_step(self, batch, batch_idx):
+        loss, (y_hat, y) = self.shared_step(batch, batch_idx)
+        return {"y": y, "y_hat": y_hat, "loss": loss}
 
-        result = self.calc_and_log_metrics(out.y_hat, out.y)
-        result.log('val_loss', avg_val_loss, prog_bar=True)
+    def validation_epoch_end(self, preds):
+        losses = torch.tensor([pred['loss'] for pred in preds])
+        ys = torch.cat([pred['y'] for pred in preds])
+        y_hats = torch.cat([pred['y_hat'] for pred in preds])
+        avg_val_loss = losses.mean()
 
-        return result
+        self.calc_and_log_metrics(y_hats, ys)
+        self.log('val_loss', avg_val_loss, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
         _, (y_hat, y) = self.shared_step(batch, batch_idx)
-        result = pl.EvalResult()
-        result.y = y
-        result.y_hat = y_hat
-        return result
+        return {"y": y, "y_hat": y_hat}
 
     def test_epoch_end(self, out):
-        result = self.calc_and_log_metrics(out.y_hat, out.y)
-        torch.save(out.y_hat.cpu(), 'preds.pt')
-        torch.save(out.y.cpu(), 'labels.pt')
-
-        return result
+        ys = torch.cat([pred['y'] for pred in preds])
+        y_hats = torch.cat([pred['y_hat'] for pred in preds])
+        self.calc_and_log_metrics(y_hats, ys)
+        torch.save(y_hats.cpu(), 'preds.pt')
+        torch.save(ys.cpu(), 'labels.pt')
 
     def create_opt(self, opt_func, sched_func, lr=None, wd=None, skip_bn_wd=True):
         if lr is None:

@@ -228,7 +228,7 @@ def plot_lr_loss(lrs, losses):
 
 # Cell
 def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100,
-            exp=True, cpu=True, fast_dev_run=False, skip_last=5, verbose=False):
+            exp=True, cpu=False, fast_dev_run=False, skip_last=5, verbose=False):
     args = {}
     lr_finder=None
     if not cpu:
@@ -244,7 +244,7 @@ def lr_find(model, dm, min_lr=1e-7, max_lr=1., n_train=100,
         lr_finder = trainer.tuner.lr_find(model, dm.train_dataloader(), dm.val_dataloader(),
                                     min_lr=min_lr, max_lr=max_lr,
                                     num_training=n_train,
-                                    mode='exponential' if exp else 'linear', early_stop_threshold=1e10)
+                                    mode='exponential' if exp else 'linear', early_stop_threshold=None)
 
         # Inspect results
         lrs, losses = lr_finder.results['lr'][:-skip_last], lr_finder.results['loss'][:-skip_last]
