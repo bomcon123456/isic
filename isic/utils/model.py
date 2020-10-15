@@ -108,7 +108,7 @@ def create_body(arch):
     def _alexnet_split(m:nn.Module):
         return [params(m[0][0][:6]), params(m[0][0][6:]), params(m[1:])]
     def _norm_split(m):
-        return [params(m)]
+        return [p for p in m.parameters() if p.requires_grad]
 
     if isinstance(arch, str):
         model = getattr(models, arch)(pretrained=True)
