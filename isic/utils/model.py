@@ -107,6 +107,8 @@ def create_body(arch):
         return [params(m[0][0][:22]), params(m[0][0][22:]), params(m[1:])]
     def _alexnet_split(m:nn.Module):
         return [params(m[0][0][:6]), params(m[0][0][6:]), params(m[1:])]
+    def _norm_split(m):
+        return [params(m)]
 
     if isinstance(arch, str):
         model = getattr(models, arch)(pretrained=True)
@@ -131,13 +133,13 @@ def create_body(arch):
         else:
             ll = list(enumerate(model.children()))
             cut = next(i for i,o in reversed(ll) if has_pool_type(o))
-            split = params
+            split = _norm_split
         body = nn.Sequential(*list(model.children())[:cut])
     else:
         model = arch
         ll = list(enumerate(model.children()))
         cut = next(i for i,o in reversed(ll) if has_pool_type(o))
-        split = params
+        split = _norm_split
         body = nn.Sequential(*list(model.children())[:cut])
     num_ftrs = num_features_model(body)
 
