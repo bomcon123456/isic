@@ -25,16 +25,23 @@ from .callback.mixup import MixupDict
 from .callback.cutmix import CutmixDict
 from .callback.freeze import FreezeCallback, UnfreezeCallback
 from .utils.core import reduce_loss, generate_val_steps
-from .utils.model import apply_init, get_bias_batchnorm_params, apply_leaf, check_attrib_module, create_body, create_head, lr_find, freeze, unfreeze, log_metrics_per_key
+from .utils.model import apply_init, get_bias_batchnorm_params, apply_leaf, check_attrib_module, create_body, create_head, lr_find, freeze, unfreeze, log_metrics_per_key, has_pool_type
+from .hook import num_features_model
 
 # Cell
 class BaselineModel(LightningModule):
     def __init__(self, arch='resnet50', lr=1e-2, loss_func=None):
         super().__init__()
         self.save_hyperparameters()
-        self.model = getattr(models, arch)(pretrained=True)
-        num_ftrs = self.model.fc.in_features
-        self.model.fc = nn.Linear(num_ftrs, 7)
+        if isinstance(arch, str):
+            self.model = getattr(models, arch)(pretrained=True)
+        else:
+            self.model = arch
+        num_ftrs = num_features_model(self.model)
+        ll = list(enumerate(self.model.children()))
+        cut = next(i for i,o in reversed(ll) if has_pool_type(o))
+        body = nn.Sequential(*list(self.model.children())[:cut])
+        self.model = nn.Sequential(body, nn.Linear(num_ftrs, 7))
         self.loss_func = loss_func
         if self.loss_func is None:
             self.loss_func = F.cross_entropy
@@ -49,17 +56,9 @@ class BaselineModel(LightningModule):
 
     def training_step(self, batch, batch_idx):
         loss, _ = self.shared_step(batch, batch_idx)
-        result = pl.TrainResult(minimize=loss)
-        result.log('train_loss', loss)
-        return result
+        self.log('train_loss', loss)
 
-    def validation_step(self, batch, batch_idx):
-        loss, (y_hat, y) = self.shared_step(batch, batch_idx)
-        result = pl.EvalResult()
-        result.y = y
-        result.y_hat = y_hat
-        result.loss = loss
-        return result
+        return loss
 
     def calc_and_log_metrics(self, y_hat, y):
         acc = FM.accuracy(y_hat, y, num_classes=7)
@@ -68,40 +67,39 @@ class BaselineModel(LightningModule):
         f1 = FM.f1_score(y_hat, y, num_classes=7, class_reduction='macro')
         prec_arr, recall_arr = FM.precision_recall(y_hat, y, num_classes=7, class_reduction='none')
 
-        result = pl.EvalResult()
-        result.log('val_acc', acc, prog_bar=True)
-        result.log('val_precision', precision, prog_bar=True)
-        result.log('val_recall', recall, prog_bar=True)
-        result.log('F1', f1, prog_bar=True)
+        self.log('val_acc', acc, prog_bar=True)
+        self.log('val_precision', precision, prog_bar=True)
+        self.log('val_recall', recall, prog_bar=True)
+        self.log('F1', f1, prog_bar=True)
         metrics = {
             "precision": prec_arr,
             "recall": recall_arr,
         }
-        log_metrics_per_key(result, metrics)
-        return result
+        log_metrics_per_key(self, metrics)
 
-    def validation_epoch_end(self, out):
-        avg_val_loss = out.loss.mean()
+    def validation_step(self, batch, batch_idx):
+        loss, (y_hat, y) = self.shared_step(batch, batch_idx)
+        return {"y": y, "y_hat": y_hat, "loss": loss}
 
-        result = self.calc_and_log_metrics(out.y_hat, out.y)
-        result.log('val_loss', avg_val_loss, prog_bar=True)
+    def validation_epoch_end(self, preds):
+        losses = torch.tensor([pred['loss'] for pred in preds])
+        ys = torch.cat([pred['y'] for pred in preds])
+        y_hats = torch.cat([pred['y_hat'] for pred in preds])
+        avg_val_loss = losses.mean()
 
-        return result
-
+        self.calc_and_log_metrics(y_hats, ys)
+        self.log('val_loss', avg_val_loss, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
         _, (y_hat, y) = self.shared_step(batch, batch_idx)
-        result = pl.EvalResult()
-        result.y = y
-        result.y_hat = y_hat
-        return result
+        return {"y": y, "y_hat": y_hat}
 
-    def test_epoch_end(self, out):
-        result = self.calc_and_log_metrics(out.y_hat, out.y)
-        torch.save(out.y_hat.cpu(), 'preds.pt')
-        torch.save(out.y.cpu(), 'labels.pt')
-
-        return result
+    def test_epoch_end(self, preds):
+        ys = torch.cat([pred['y'] for pred in preds])
+        y_hats = torch.cat([pred['y_hat'] for pred in preds])
+        self.calc_and_log_metrics(y_hats, ys)
+        torch.save(y_hats.cpu(), 'preds.pt')
+        torch.save(ys.cpu(), 'labels.pt')
 
     def configure_optimizers(self):
         opt = torch.optim.Adam(self.parameters(), lr=self.hparams.lr)
