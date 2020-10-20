@@ -19,6 +19,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.models as models
 from torch.autograd import Variable
+import pretrainedmodels
+
 
 import pytorch_lightning as pl
 from pytorch_lightning.core import LightningModule
@@ -108,10 +110,12 @@ def create_body(arch):
     def _alexnet_split(m:nn.Module):
         return [params(m[0][0][:6]), params(m[0][0][6:]), params(m[1:])]
     def _norm_split(m):
-        return [p for p in m.parameters() if p.requires_grad]
+        return [params(m[0]), params(m[1])]
 
     if isinstance(arch, str):
         model = getattr(models, arch)(pretrained=True)
+        if model is None:
+            model = getattr(pretrainedmodels, arch)(num_classes=1000, pretrained='imagenet')
         if 'xresnet' in arch:
             cut = -4
             split = _xresnet_split

@@ -33,9 +33,12 @@ class BaselineModel(LightningModule):
     def __init__(self, arch='resnet50', lr=1e-2, loss_func=None):
         super().__init__()
         self.save_hyperparameters()
-        self.model = getattr(models, arch)(pretrained=True)
-        num_ftrs = self.model.fc.in_features
-        self.model.fc = nn.Linear(num_ftrs, 7)
+        if isinstance(arch, str):
+            self.model = getattr(models, arch)(pretrained=True)
+            num_ftrs = self.model.fc.in_features
+            self.model.fc = nn.Linear(num_ftrs, 7)
+        else:
+            self.model = arch
         self.loss_func = loss_func
         if self.loss_func is None:
             self.loss_func = F.cross_entropy
